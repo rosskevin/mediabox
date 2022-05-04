@@ -31,7 +31,7 @@ services:
       # Exposed containers
       # See more @ https://community.containo.us/t/docker-compose-with-network-mode-service-service-name/3395
       #
-      - traefik.http.routers.deluge.entrypoints=websecured
+      - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
     ports:
@@ -47,7 +47,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
-      - traefik.http.routers.deluge.entrypoints=websecured
+      - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}

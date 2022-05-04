@@ -13,7 +13,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
-      - traefik.http.routers.deluge.entrypoints=websecured
+      - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}

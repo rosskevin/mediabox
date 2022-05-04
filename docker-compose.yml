@@ -32,7 +32,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
-      - traefik.http.routers.plex.entrypoints=websecured
+      - traefik.http.routers.plex.entrypoints=websecure
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - traefik.http.routers.plex.tls.certresolver=myresolver
     environment:
@@ -61,7 +61,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
-      - traefik.http.routers.sonarr.entrypoints=websecured
+      - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
@@ -89,7 +89,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
-      - traefik.http.routers.radarr.entrypoints=websecured
+      - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
@@ -116,7 +116,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
-      - traefik.http.routers.bazarr.entrypoints=websecured
+      - traefik.http.routers.bazarr.entrypoints=websecure
       - traefik.http.routers.bazarr.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
@@ -139,7 +139,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.jackett.rule=Host(`jackett.${DOMAIN}`)
-      - traefik.http.routers.jackett.entrypoints=websecured
+      - traefik.http.routers.jackett.entrypoints=websecure
       - traefik.http.routers.jackett.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
@@ -162,7 +162,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.nzbhydra.rule=Host(`nzbhydra.${DOMAIN}`)
-      - traefik.http.routers.nzbhydra.entrypoints=websecured
+      - traefik.http.routers.nzbhydra.entrypoints=websecure
       - traefik.http.routers.nzbhydra.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
@@ -186,7 +186,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
-      - traefik.http.routers.sabnzbd.entrypoints=websecured
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
     environment:
@@ -211,7 +211,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
-      - traefik.http.routers.portainer.entrypoints=websecured
+      - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.tls.certresolver=myresolver
       - traefik.http.services.portainer.loadbalancer.server.port=9000
     restart: always
@@ -248,7 +248,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.orzanizr.rule=Host(`organizr.${DOMAIN}`) || Host(`mediabox.${DOMAIN}`)
-      - traefik.http.routers.orzanizr.entrypoints=websecured
+      - traefik.http.routers.orzanizr.entrypoints=websecure
       - traefik.http.routers.orzanizr.tls.certresolver=myresolver
       - traefik.http.services.organizr.loadbalancer.server.port=80
     environment:
@@ -271,7 +271,7 @@ services:
       - com.centurylinklabs.duplicati.enable=true
       - traefik.enable=true
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
-      - traefik.http.routers.duplicati.entrypoints=websecured
+      - traefik.http.routers.duplicati.entrypoints=websecure
       - traefik.http.routers.duplicati.tls.certresolver=myresolver
     environment:
       - PUID=${PUID}
