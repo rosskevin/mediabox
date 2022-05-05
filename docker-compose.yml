@@ -34,6 +34,7 @@ services:
       - traefik.http.routers.plex.entrypoints=websecure
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - traefik.http.routers.plex.tls.certresolver=myresolver
+      - traefik.http.routers.plex.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -61,6 +62,7 @@ services:
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.tls.certresolver=myresolver
+      - traefik.http.routers.sonarr.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -88,6 +90,7 @@ services:
       - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.tls.certresolver=myresolver
+      - traefik.http.routers.radarr.middlewares=internalwhitelist@docker    
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -114,6 +117,7 @@ services:
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
       - traefik.http.routers.bazarr.entrypoints=websecure
       - traefik.http.routers.bazarr.tls.certresolver=myresolver
+      - traefik.http.routers.bazarr.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -136,6 +140,7 @@ services:
       - traefik.http.routers.jackett.rule=Host(`jackett.${DOMAIN}`)
       - traefik.http.routers.jackett.entrypoints=websecure
       - traefik.http.routers.jackett.tls.certresolver=myresolver
+      - traefik.http.routers.jackett.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -158,6 +163,7 @@ services:
       - traefik.http.routers.nzbhydra.rule=Host(`nzbhydra.${DOMAIN}`)
       - traefik.http.routers.nzbhydra.entrypoints=websecure
       - traefik.http.routers.nzbhydra.tls.certresolver=myresolver
+      - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -182,10 +188,7 @@ services:
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
-
-      # - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=127.0.0.1/32,192.168.1.0/24  
-      # - traefik.http.routers.sabnzbd.middlewares=internalwhitelist
-
+      - traefik.http.routers.sabnzbd.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -210,6 +213,7 @@ services:
       - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.tls.certresolver=myresolver
       - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
     restart: always
     command: -H unix:///var/run/docker.sock
     volumes:
@@ -245,6 +249,7 @@ services:
       - traefik.http.routers.orzanizr.entrypoints=websecure
       - traefik.http.routers.orzanizr.tls.certresolver=myresolver
       - traefik.http.services.organizr.loadbalancer.server.port=80
+      - traefik.http.routers.organizr.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -266,6 +271,7 @@ services:
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
       - traefik.http.routers.duplicati.entrypoints=websecure
       - traefik.http.routers.duplicati.tls.certresolver=myresolver
+      - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

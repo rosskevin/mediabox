@@ -1,5 +1,9 @@
 version: "3.3"
 
+#
+# This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
+#   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
+
 networks:
   web:
     external: false
@@ -47,6 +51,8 @@ services:
       - traefik.http.routers.api.service=api@internal
       # define reusable middlewares
       - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      # apply ip restriction to dashboard UI
+      - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
 
   # sample for verification of traefik, routing, etc.
   whoami:
@@ -60,3 +66,4 @@ services:
       - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)
       - traefik.http.routers.whoami.entrypoints=websecure
       - traefik.http.routers.whoami.tls.certresolver=myresolver
+      - traefik.http.routers.whoami.middlewares=internalwhitelist@docker

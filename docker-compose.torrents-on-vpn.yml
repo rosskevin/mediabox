@@ -33,6 +33,7 @@ services:
       - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
+      - traefik.http.routers.vpn.middlewares=internalwhitelist@docker
     ports:
       - 8112:8112 # Deluge
 
@@ -48,6 +49,7 @@ services:
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
       - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
+      - traefik.http.routers.deluge.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
