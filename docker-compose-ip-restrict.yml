@@ -1,0 +1,79 @@
+version: "3.3"
+
+services:
+
+  sabnzbd:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.sabnzbd.middlewares=internalwhitelist
+
+  whoami:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.whoami.middlewares=internalwhitelist
+
+  watchtower:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.watchtower.middlewares=internalwhitelist
+
+  sonarr:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.sonarr.middlewares=internalwhitelist
+   
+  radarr:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.radarr.middlewares=internalwhitelist    
+
+  bazarr:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.bazarr.middlewares=internalwhitelist
+   
+  jackett:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.jackett.middlewares=internalwhitelist
+   
+  nzbhydra2:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist
+
+  portainer:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.portainer.middlewares=internalwhitelist
+  
+  portainer_agent:
+      labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.portainer_agent.middlewares=internalwhitelist 
+
+  organizr:
+      labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.organizr.middlewares=internalwhitelist
+
+  duplicati:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.duplicati.middlewares=internalwhitelist
+   
+  traefik:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.traefik.middlewares=internalwhitelist
+
+  vpn:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.vpn.middlewares=internalwhitelist
+
+  deluge:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.deluge.middlewares=internalwhitelist
+

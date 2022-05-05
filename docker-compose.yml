@@ -188,6 +188,10 @@ services:
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+
+      # - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=127.0.0.1/32,192.168.1.0/24  
+      # - traefik.http.routers.sabnzbd.middlewares=internalwhitelist
+
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

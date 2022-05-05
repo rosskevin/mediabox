@@ -30,6 +30,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${CONTAINERS}/traefik:/etc/traefik/acme
     networks:
+      - web
       - internal
     labels:
       - traefik.enable=true
