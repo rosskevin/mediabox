@@ -14,6 +14,7 @@ services:
       - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
       - traefik.http.routers.deluge.entrypoints=websecure
       - traefik.http.routers.deluge.tls.certresolver=myresolver
+      - traefik.http.routers.deluge.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

@@ -1,8 +1,11 @@
 version: "3.3"
 
 #
+# An alternative to `docker-compose-traefik.yml`, this file uses cloudflare for LetsEncrypt DNS challenge and provides a wildcard cert for all subdomains.
+#
 # This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
 #   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
+#
 
 networks:
   web:
