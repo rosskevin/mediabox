@@ -1,5 +1,9 @@
 version: "3.3"
 
+networks:
+  web:
+    external: false
+
 services:
   traefik:
     image: traefik
@@ -8,12 +12,12 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080 # traefik dashboard
+      - 8080:8080 # dashboard UI (enabled by --api.insecure=true)
     command:
       - --api.dashboard=true
-      - --api.debug=true      
+      - --api.debug=false      
       - --api.insecure=true
-      - --log.level=DEBUG
+      - --log.level=INFO
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
@@ -37,11 +41,12 @@ services:
       - ${CONTAINERS}/traefik/acme:/etc/traefik/acme
     networks:
       - web
-      - internal
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)
-      - traefik.http.routers.api.service=api@web
+      - traefik.http.routers.api.service=api@internal
+      # define reusable middlewares
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
 
   # sample for verification of traefik, routing, etc.
   whoami:
@@ -49,7 +54,7 @@ services:
     restart: always
     container_name: whoami
     networks:
-      - internal
+      - web
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)

@@ -1,5 +1,9 @@
 version: "3.3"
 
+networks:
+  web:
+    external: false
+
 services:
   traefik:
     image: traefik
@@ -31,7 +35,7 @@ services:
       - ${CONTAINERS}/traefik:/etc/traefik/acme
     networks:
       - web
-      - internal
+      - web
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)

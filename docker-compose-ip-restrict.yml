@@ -1,85 +1,52 @@
 version: "3.3"
 
 services:
-
   # restrict plex for now so we don't have to worry about bots etc.
   plex:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.plex.middlewares=internalwhitelist
-
+      - traefik.http.routers.plex.middlewares=internalwhitelist@docker
   sabnzbd:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.sabnzbd.middlewares=internalwhitelist
-
+      - traefik.http.routers.sabnzbd.middlewares=internalwhitelist@docker
   whoami:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.whoami.middlewares=internalwhitelist
-
+      - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
   watchtower:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.watchtower.middlewares=internalwhitelist
-
+      - traefik.http.routers.watchtower.middlewares=internalwhitelist@docker
   sonarr:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.sonarr.middlewares=internalwhitelist
-   
+      - traefik.http.routers.sonarr.middlewares=internalwhitelist@docker
   radarr:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.radarr.middlewares=internalwhitelist    
-
+      - traefik.http.routers.radarr.middlewares=internalwhitelist@docker    
   bazarr:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.bazarr.middlewares=internalwhitelist
-   
+      - traefik.http.routers.bazarr.middlewares=internalwhitelist@docker
   jackett:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.jackett.middlewares=internalwhitelist
-   
+      - traefik.http.routers.jackett.middlewares=internalwhitelist@docker
   nzbhydra2:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist
-
+      - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist@docker
   portainer:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.portainer.middlewares=internalwhitelist
-  
+      - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
   portainer_agent:
-      labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.portainer_agent.middlewares=internalwhitelist 
-
+    labels:
+      - traefik.http.routers.portainer_agent.middlewares=internalwhitelist@docker 
   organizr:
       labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.organizr.middlewares=internalwhitelist
-
+      - traefik.http.routers.organizr.middlewares=internalwhitelist@docker
   duplicati:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.duplicati.middlewares=internalwhitelist
-   
+      - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
   traefik:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.traefik.middlewares=internalwhitelist
-
+      - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
   vpn:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.vpn.middlewares=internalwhitelist
-
+      - traefik.http.routers.vpn.middlewares=internalwhitelist@docker
   deluge:
     labels:
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      - traefik.http.routers.deluge.middlewares=internalwhitelist
-
+      - traefik.http.routers.deluge.middlewares=internalwhitelist@docker
