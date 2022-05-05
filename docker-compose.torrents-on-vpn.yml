@@ -10,8 +10,7 @@ services:
       - DNS=${VPN_DNS}
       - TZ=${TIMEZONE}
     networks:
-      default:
-        ipv4_address: 172.20.50.2
+      - web
     read_only: false
     tmpfs:
       - /run

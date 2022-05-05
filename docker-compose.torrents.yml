@@ -5,8 +5,7 @@ services:
     image: linuxserver/deluge
     container_name: deluge
     networks:
-      default:
-        ipv4_address: 172.20.1.7
+      - web
     ports: 
       - 8112:8112
     labels:

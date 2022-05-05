@@ -5,8 +5,7 @@ services:
     image: linuxserver/calibre-web
     container_name: calibre-web
     networks:
-      default:
-        ipv4_address: 172.20.2.6
+      - web
     ports:
       - 8083:8083
     labels:

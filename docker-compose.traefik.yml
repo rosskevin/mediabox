@@ -16,7 +16,7 @@ services:
       - --log.level=DEBUG
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=default
+      - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
@@ -30,9 +30,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${CONTAINERS}/traefik:/etc/traefik/acme
     networks:
-      default:
-        ipv4_address: 172.20.50.1
+      - web
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)
-      - traefik.http.routers.api.service=api@internal
+      - traefik.http.routers.api.service=api@web
