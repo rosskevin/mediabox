@@ -42,20 +42,7 @@ services:
       - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)
       - traefik.http.routers.api.service=api@web
 
-      # - traefik.http.routers.traefik.entrypoints=http
-      # - traefik.http.middlewares.traefik-auth.basicauth.users=USER:PASSWORD
-      # - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
-      # - traefik.http.routers.traefik.middlewares=traefik-https-redirect
-      # 
-      # - traefik.http.routers.traefik-secure.entrypoints=https
-      # - traefik.http.routers.traefik-secure.rule=Host(`traefik.${DOMAIN}`)
-      # - traefik.http.routers.traefik-secure.middlewares=traefik-auth
-      # - traefik.http.routers.traefik-secure.tls=true
-      # - traefik.http.routers.traefik-secure.tls.certresolver=myresolver
-      # - traefik.http.routers.traefik-secure.tls.domains[0].main=${DOMAIN}
-      # - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${DOMAIN}
-      # - traefik.http.routers.traefik-secure.service=api@web
-
+  # sample for verification of traefik, routing, etc.
   whoami:
     image: traefik/whoami
     restart: always
