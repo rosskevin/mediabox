@@ -2,6 +2,12 @@ version: "3.3"
 
 services:
 
+  # restrict plex for now so we don't have to worry about bots etc.
+  plex:
+    labels:
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.routers.plex.middlewares=internalwhitelist
+
   sabnzbd:
     labels:
       - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
