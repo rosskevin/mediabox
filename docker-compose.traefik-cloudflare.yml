@@ -37,6 +37,7 @@ services:
       - ${CONTAINERS}/traefik/acme:/etc/traefik/acme
     networks:
       - web
+      - internal
     labels:
       - traefik.enable=true
       - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)
@@ -48,7 +49,7 @@ services:
     restart: always
     container_name: whoami
     networks:
-      - web
+      - internal
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)

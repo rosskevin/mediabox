@@ -1,6 +1,8 @@
 version: "3.3"
 
 networks:
+  internal:
+    external: false
   web:
     external: true
 
@@ -19,7 +21,7 @@ services:
     image: linuxserver/plex
     container_name: plex
     networks:
-      - web
+      - internal
     ports:
       - 32400:32400/tcp
       - 32400:32400/udp
@@ -52,7 +54,7 @@ services:
     image: linuxserver/sonarr
     container_name: sonarr
     networks:
-      - web
+      - internal
     ports:
       - 8989:8989
     depends_on:
@@ -79,7 +81,7 @@ services:
     image: linuxserver/radarr
     container_name: radarr
     networks:
-      - web
+      - internal
     ports:
       - 7878:7878
     depends_on:
@@ -106,7 +108,7 @@ services:
     image: linuxserver/bazarr
     container_name: bazarr
     networks:
-      - web
+      - internal
     ports:
       - 6767:6767
     depends_on:
@@ -131,7 +133,7 @@ services:
     image: linuxserver/jackett
     container_name: jackett
     networks:
-      - web
+      - internal
     ports:
       - 9117:9117
     labels:
@@ -153,7 +155,7 @@ services:
     image: linuxserver/nzbhydra2
     container_name: nzbhydra2
     networks:
-      - web
+      - internal
     ports:
       - 5076:5076
     labels:
@@ -175,7 +177,7 @@ services:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
     networks:
-      - web
+      - internal
     ports:
       - 9050:8080
       - 9051:9090
@@ -199,7 +201,7 @@ services:
     image: portainer/portainer-ce
     container_name: portainer
     networks:
-      - web
+      - internal
     ports:
       - 9000:9000
       - 8000:8000
@@ -220,7 +222,7 @@ services:
     image: portainer/agent
     container_name: portainer-agent
     networks:
-      - web
+      - internal
     ports:
       - 9001:9001
     volumes:
@@ -235,7 +237,7 @@ services:
     image: organizr/organizr
     container_name: organizr
     networks:
-      - web
+      - internal
     ports:
       - 9983:80
     labels:
@@ -257,7 +259,7 @@ services:
     image: linuxserver/duplicati
     container_name: duplicati
     networks:
-      - web
+      - internal
     ports:
       - 8200:8200
     labels:

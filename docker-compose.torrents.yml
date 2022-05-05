@@ -5,7 +5,7 @@ services:
     image: linuxserver/deluge
     container_name: deluge
     networks:
-      - web
+      - internal
     ports: 
       - 8112:8112
     labels:

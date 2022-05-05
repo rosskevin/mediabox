@@ -10,7 +10,7 @@ services:
       - DNS=${VPN_DNS}
       - TZ=${TIMEZONE}
     networks:
-      - web
+      - internal
     read_only: false
     tmpfs:
       - /run
