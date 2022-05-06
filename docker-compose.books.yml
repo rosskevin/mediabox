@@ -12,8 +12,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.calibreweb.rule=Host(`calibre-web.${DOMAIN}`)
-      - traefik.http.routers.calibreweb.entrypoints=websecure
-      - traefik.http.routers.calibreweb.tls.certresolver=myresolver
+      - traefik.http.routers.calibreweb.entrypoints=https
     environment:
       - PUID=1000
       - PGID=1000

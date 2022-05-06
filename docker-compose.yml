@@ -31,9 +31,8 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
-      - traefik.http.routers.plex.entrypoints=websecure
+      - traefik.http.routers.plex.entrypoints=https
       - traefik.http.services.plex.loadbalancer.server.port=32400
-      - traefik.http.routers.plex.tls.certresolver=myresolver
       - traefik.http.routers.plex.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
@@ -60,8 +59,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
-      - traefik.http.routers.sonarr.entrypoints=websecure
-      - traefik.http.routers.sonarr.tls.certresolver=myresolver
+      - traefik.http.routers.sonarr.entrypoints=https
       - traefik.http.routers.sonarr.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
@@ -88,8 +86,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
-      - traefik.http.routers.radarr.entrypoints=websecure
-      - traefik.http.routers.radarr.tls.certresolver=myresolver
+      - traefik.http.routers.radarr.entrypoints=https
       - traefik.http.routers.radarr.middlewares=internalwhitelist@docker    
     environment:
       - PUID=${PUID}
@@ -115,8 +112,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
-      - traefik.http.routers.bazarr.entrypoints=websecure
-      - traefik.http.routers.bazarr.tls.certresolver=myresolver
+      - traefik.http.routers.bazarr.entrypoints=https
       - traefik.http.routers.bazarr.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
@@ -138,8 +134,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.jackett.rule=Host(`jackett.${DOMAIN}`)
-      - traefik.http.routers.jackett.entrypoints=websecure
-      - traefik.http.routers.jackett.tls.certresolver=myresolver
+      - traefik.http.routers.jackett.entrypoints=https
       - traefik.http.routers.jackett.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
@@ -161,8 +156,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.nzbhydra.rule=Host(`nzbhydra.${DOMAIN}`)
-      - traefik.http.routers.nzbhydra.entrypoints=websecure
-      - traefik.http.routers.nzbhydra.tls.certresolver=myresolver
+      - traefik.http.routers.nzbhydra.entrypoints=https
       - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}
@@ -185,8 +179,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
-      - traefik.http.routers.sabnzbd.entrypoints=websecure
-      - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
+      - traefik.http.routers.sabnzbd.entrypoints=https
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - traefik.http.routers.sabnzbd.middlewares=internalwhitelist@docker
     environment:
@@ -210,8 +203,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
-      - traefik.http.routers.portainer.entrypoints=websecure
-      - traefik.http.routers.portainer.tls.certresolver=myresolver
+      - traefik.http.routers.portainer.entrypoints=https
       - traefik.http.services.portainer.loadbalancer.server.port=9000
       - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
     restart: always
@@ -246,8 +238,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.orzanizr.rule=Host(`organizr.${DOMAIN}`) || Host(`mediabox.${DOMAIN}`)
-      - traefik.http.routers.orzanizr.entrypoints=websecure
-      - traefik.http.routers.orzanizr.tls.certresolver=myresolver
+      - traefik.http.routers.orzanizr.entrypoints=https
       - traefik.http.services.organizr.loadbalancer.server.port=80
       - traefik.http.routers.organizr.middlewares=internalwhitelist@docker
     environment:
@@ -269,8 +260,7 @@ services:
       - com.centurylinklabs.duplicati.enable=true
       - traefik.enable=true
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
-      - traefik.http.routers.duplicati.entrypoints=websecure
-      - traefik.http.routers.duplicati.tls.certresolver=myresolver
+      - traefik.http.routers.duplicati.entrypoints=https
       - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
     environment:
       - PUID=${PUID}

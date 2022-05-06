@@ -22,24 +22,35 @@ services:
       - 8080:8080 # dashboard UI (enabled by --api.insecure=true)
     command:
       - --api.dashboard=true
-      - --api.debug=false      
-      - --api.insecure=true
+      - --api.debug=true      
+      #- --api.insecure=true
       - --log.level=INFO
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
 
       # Entrypoints for HTTP, HTTPS, and NX (TCP + UDP)
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --entryPoints.traefik.address=:8080
+
+      # Setup tls use for all services
+      - --entrypoints.https.http.tls.certresolver=cloudflare-resolver
+      - --entrypoints.https.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.https.http.tls.domains[0].sans=*.${DOMAIN}
+
+      # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
+      - --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22
 
       # Letsencrypt - wildcard certificates can only be generated through a DNS-01 challenge.
-      - --certificatesresolvers.myresolver.acme.dnschallenge=true
-      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.myresolver.acme.email=${SSL_ACME_EMAIL}
-      - --certificatesresolvers.myresolver.acme.storage=etc/traefik/acme/acme.json
+      - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge=true
+      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.delayBeforeCheck=90 # To delay DNS check and reduce LE hitrate
+      - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.cloudflare-resolver.acme.email=${SSL_ACME_EMAIL}
+      - --certificatesresolvers.cloudflare-resolver.acme.storage=etc/traefik/acme/acme.json
       # enable the following staging server initially to test successful issuance of certificates (and avoid being rate limited due to errors)
-      # - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      # - --certificatesresolvers.cloudflare-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_API_KEY=${CF_API_KEY}
@@ -50,12 +61,27 @@ services:
       - web
     labels:
       - traefik.enable=true
-      - traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)
-      - traefik.http.routers.api.service=api@internal
-      # define reusable middlewares
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
-      # apply ip restriction to dashboard UI
-      - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
+      # HTTP-to-HTTPS Redirect
+      - "traefik.http.routers.http-catchall.entrypoints=http"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # HTTP Routers
+      - "traefik.http.routers.traefik-rtr.entrypoints=https"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.${DOMAIN}`)"
+      ## Services - API
+      - "traefik.http.routers.traefik-rtr.service=api@internal"
+      ## Healthcheck/ping
+      #- "traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)"
+      #- "traefik.http.routers.ping.tls=true"
+      #- "traefik.http.routers.ping.service=ping@internal"
+      ## Middlewares
+      #- "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
+
+      # Define reusable middlewares
+      # - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      # Apply ip restriction to dashboard UI
+      # - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
 
   # sample for verification of traefik, routing, etc.
   whoami:
@@ -67,6 +93,5 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)
-      - traefik.http.routers.whoami.entrypoints=websecure
-      - traefik.http.routers.whoami.tls.certresolver=myresolver
-      - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
+      - traefik.http.routers.whoami.entrypoints=https
+      # - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
