@@ -1,0 +1,112 @@
+version: "3.3"
+
+#
+#
+#
+# @credit https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/
+#
+
+services:
+
+  traefik:
+    labels:
+      # -----------------------------
+      # Define reusable middlewares
+      # -----------------------------
+
+      # oauth
+      - traefik.http.middlewares.gcp-oauth.forwardauth.address=https://oauth.drinkto.me/_oauth
+      - traefik.http.middlewares.gcp-oauth.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.gcp-oauth.forwardauth.authResponseHeaders=X-Forwarded-User
+
+      # rate limit
+      - http.middlewares.middlewares-rate-limit.rateLimit.average=100
+      - http.middlewares.middlewares-rate-limit.rateLimit.burst=50
+
+      # -----------------------------
+      # Define chain
+      # -----------------------------
+      - traefik.http.middlewares.chain-oauth.chain.middlewares=rate-limit,gcp-oauth
+
+      # Apply middlewares to dashboard UI
+      # - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
+
+
+  # oauth:
+  #   <<: *common-keys-core # See EXTENSION FIELDS at the top
+  #   container_name: oauth
+  #   image: thomseddon/traefik-forward-auth:latest
+  #   # image: thomseddon/traefik-forward-auth:2.1-arm # Use this image with Raspberry Pi
+  #   # Allow apps to bypass OAuth. Radarr example below will bypass OAuth if API key is present in the request (eg. from NZB360 mobile app).
+  #   # While this is one way, the recommended way is to bypass authentication using Traefik labels shown in some of the apps later.
+  #   # command: --rule.radarr.action=allow --rule.radarr.rule="Headers(`X-Api-Key`, `$RADARR_API_KEY`)"
+  #   # command: --rule.sabnzbd.action=allow --rule.sabnzbd.rule="HeadersRegexp(`X-Forwarded-Uri`, `$SABNZBD_API_KEY`)"
+  #   environment:
+  #     - CONFIG=/config
+  #     - COOKIE_DOMAIN=$DOMAINNAME0
+  #     - INSECURE_COOKIE=false
+  #     - AUTH_HOST=oauth.$DOMAINNAME0
+  #     - URL_PATH=/_oauth
+  #     - LOG_LEVEL=warn
+  #     - LOG_FORMAT=text
+  #     - LIFETIME=86400 # 1 day
+  #     - DEFAULT_ACTION=auth
+  #     - DEFAULT_PROVIDER=google
+  #   secrets:
+  #     - source: traefik_forward_auth
+  #       target: /config
+  #   labels:
+  #     - "traefik.enable=true"
+  #     ## HTTP Routers
+  #     - "traefik.http.routers.oauth-rtr.tls=true"
+  #     - "traefik.http.routers.oauth-rtr.entrypoints=https"
+  #     - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.$DOMAINNAME0`)"
+  #     ## Middlewares
+  #     - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
+  #     ## HTTP Services
+  #     - "traefik.http.routers.oauth-rtr.service=oauth-svc"
+  #     - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
+
+
+  # traefik:
+  #   labels:
+  #     - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
+  # whoami:
+  #   labels:
+  #     - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
+  # plex:
+  #   labels:
+  #     - traefik.http.routers.plex.middlewares=internalwhitelist@docker
+  # sabnzbd:
+  #   labels:
+  #     - traefik.http.routers.sabnzbd.middlewares=internalwhitelist@docker
+  # sonarr:
+  #   labels:
+  #     - traefik.http.routers.sonarr.middlewares=internalwhitelist@docker
+  # radarr:
+  #   labels:
+  #     - traefik.http.routers.radarr.middlewares=internalwhitelist@docker    
+  # bazarr:
+  #   labels:
+  #     - traefik.http.routers.bazarr.middlewares=internalwhitelist@docker
+  # jackett:
+  #   labels:
+  #     - traefik.http.routers.jackett.middlewares=internalwhitelist@docker
+  # nzbhydra2:
+  #   labels:
+  #     - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist@docker
+  # portainer:
+  #   labels:
+  #     - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
+  # organizr:
+  #     labels:
+  #     - traefik.http.routers.organizr.middlewares=internalwhitelist@docker
+  # duplicati:
+  #   labels:
+  #     - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
+  # vpn:
+  #   labels:
+  #     - traefik.http.routers.vpn.middlewares=internalwhitelist@docker
+  # deluge:
+  #   labels:
+  #     - traefik.http.routers.deluge.middlewares=internalwhitelist@docker

@@ -6,6 +6,8 @@ version: "3.3"
 # This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
 #   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
 #
+# @credit to https://github.com/htpcBeginner/docker-traefik for better traefik settings.
+#
 
 networks:
   web:
@@ -21,6 +23,8 @@ services:
       - 443:443
       - 8080:8080 # dashboard UI (enabled by --api.insecure=true)
     command:
+      - --global.sendAnonymousUsage=true
+
       - --api.dashboard=true
       - --api.debug=true      
       #- --api.insecure=true
@@ -61,27 +65,38 @@ services:
       - web
     labels:
       - traefik.enable=true
+      # -----------------------------
       # HTTP-to-HTTPS Redirect
+      # -----------------------------
       - "traefik.http.routers.http-catchall.entrypoints=http"
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # -----------------------------
       # HTTP Routers
+      # -----------------------------
       - "traefik.http.routers.traefik-rtr.entrypoints=https"
       - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.${DOMAIN}`)"
-      ## Services - API
+      # -----------------------------
+      # Services - API
+      # -----------------------------
       - "traefik.http.routers.traefik-rtr.service=api@internal"
-      ## Healthcheck/ping
+      # -----------------------------
+      # Healthcheck/ping
+      # -----------------------------
       #- "traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)"
       #- "traefik.http.routers.ping.tls=true"
       #- "traefik.http.routers.ping.service=ping@internal"
-      ## Middlewares
-      #- "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
 
+      # -----------------------------
       # Define reusable middlewares
-      # - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      # -----------------------------
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+
+      # -----------------------------
       # Apply ip restriction to dashboard UI
-      # - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
+      # -----------------------------
+      - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
 
   # sample for verification of traefik, routing, etc.
   whoami:
