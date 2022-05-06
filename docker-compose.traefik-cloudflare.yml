@@ -91,7 +91,7 @@ services:
       # -----------------------------
       # Define reusable middlewares
       # -----------------------------
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELISTE_SOURCERANGE}  
+      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELIST_SOURCERANGE}  
 
       # -----------------------------
       # Apply ip restriction to dashboard UI
