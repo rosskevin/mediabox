@@ -54,9 +54,9 @@ Successful completion of this stage means you can access both https://traefik.ex
 1. **Set up dynamic DNS** to cloudflare to update the `A` record for your example.com
 1. **Add wildcard CNAME** - Add a `* CNAME` to `@` 
 1. **Increase cloudflare security** - Configure increased security on your cloudflare zone, see [Cloudflare Settings for Traefik Docker: DDNS, CNAMEs, & Tweaks](https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/)
-1. **Verify HTTPS connectivity** - In `.env` set `COMPOSE_FILE=docker-compose.traefik-cloudflare.yml`, `DOMAIN,SSL_ACME_EMAIL,CF_API_EMAIL,CF_API_KEY` and `./mb up` - verify connectivity to both https://traefik.example.com and https://whoami.example.com.  Check logs with `./mb logs traefik` and make sure there are no errors.  `./mb down` when done.
+1. **Verify HTTPS connectivity** - In `.env` set `COMPOSE_FILE=traefik-cloudflare.yml`, `DOMAIN,SSL_ACME_EMAIL,CF_API_EMAIL,CF_API_KEY` and `./mb up` - verify connectivity to both https://traefik.example.com and https://whoami.example.com.  Check logs with `./mb logs traefik` and make sure there are no errors.  `./mb down` when done.
 1. (optional) **Restrict IPs allowed** - Restrict your `IP_WHITELIST_SOURCERANGE` in `.env` to a minimal set of IP addresses, or if you want it public, leave it open by default `0.0.0.0/0`
-1. (optional) **Setup Single Sign On** - Set `COMPOSE_FILE=docker-compose.traefik-cloudflare.yml:docker-compose.traefik-oauth.yml` in `.env` and `./mb up` - set up GCP based SSO via OAUTH. [Some background is available here](https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/) on the external steps, but as-is you only need to make sure your associated ENV variables are populated.  Now verify the auth challenge to both https://traefik.example.com and https://whoami.example.com.  `./mb down` when done.
+1. (optional) **Setup Single Sign On** - Set `COMPOSE_FILE=traefik-cloudflare.yml:traefik-oauth.yml` in `.env` and `./mb up` - set up GCP based SSO via OAUTH. [Some background is available here](https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/) on the external steps, but as-is you only need to make sure your associated ENV variables are populated.  Now verify the auth challenge to both https://traefik.example.com and https://whoami.example.com.  `./mb down` when done.
 
 **All good?  If not do not continue.**
 
@@ -83,8 +83,8 @@ Plan your disk layout and set up your NFS (or other) disk mounts (beyond the sco
 ## Layered setup stage 3
 Now it is time to determine what services you want to run.  
 
-1. **Add primary applications** - Edit your `.env` and chain `docker-compose.mediabox.yml` on to your `COMPOSE_FILE` variable.  The same as above, `./mb up` then check the logs of the various containers like `./mb logs plex`.  You should now be able to access each by name e.g. https://plex.example.com. 
-1. (optional) **Protect applications with SSO** - Edit your `.env` and chain `docker-compose.mediabox-oauth.yml` on to your `COMPOSE_FILE` variable.  Test again, but this time use an incognito browser (or other browser that has not utilized SSO in steps above) and be sure you receive a challenge for https://plex.example.com
+1. **Add primary applications** - Edit your `.env` and chain `mediabox.yml` on to your `COMPOSE_FILE` variable.  The same as above, `./mb up` then check the logs of the various containers like `./mb logs plex`.  You should now be able to access each by name e.g. https://plex.example.com. 
+1. (optional) **Protect applications with SSO** - Edit your `.env` and chain `mediabox-oauth.yml` on to your `COMPOSE_FILE` variable.  Test again, but this time use an incognito browser (or other browser that has not utilized SSO in steps above) and be sure you receive a challenge for https://plex.example.com
 1. (optional) **Torrents, books, etc** - view the remainder of the compose files and see what services you want.  Using the same methodology, chain the compose file, and test your changes. (I am not using torrents or books, so these may need adjustments, feel free to PR changes)
 
 ## Usage

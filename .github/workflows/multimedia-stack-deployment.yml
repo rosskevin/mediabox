@@ -29,4 +29,4 @@ jobs:
           DOWNLOADS: /data/downloads
           ORGANIZR_TAG: latest
           DELUGE_THEME: darker
-        run: docker-compose -f docker-compose.yml -f docker-compose.torrents-on-vpn.yml up -d
+        run: docker-compose -f yml -f torrents-on-vpn.yml up -d
