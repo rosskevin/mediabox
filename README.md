@@ -5,7 +5,7 @@
 ![](https://i.imgur.com/UZklu5w.jpg)
 
 ## TL;DR
-A home media server using `docker-compose` that enables SSL wildcard certificates via Cloudflare and LetsEncrypt, and allows layering of complexity and features including Single sign on (SSO) via GCP.
+A home media server using `docker-compose` that enables SSL wildcard certificates via Cloudflare and LetsEncrypt.  The approach allows layering of complexity and features including Single sign on (SSO) via GCP.
 
 ## What's in the stack?
 
