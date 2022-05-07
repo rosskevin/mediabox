@@ -1,0 +1,45 @@
+version: "3.3"
+
+#
+# This file enables SSO via Google Cloud OAUTH.  Additionally, it layers in rate limiting.
+#
+services:
+  whoami:
+    labels:
+      - traefik.http.routers.whoami.middlewares=chain-oauth@docker
+  plex:
+    labels:
+      - traefik.http.routers.plex.middlewares=chain-oauth@docker
+  sabnzbd:
+    labels:
+      - traefik.http.routers.sabnzbd.middlewares=chain-oauth@docker
+  sonarr:
+    labels:
+      - traefik.http.routers.sonarr.middlewares=chain-oauth@docker
+  radarr:
+    labels:
+      - traefik.http.routers.radarr.middlewares=chain-oauth@docker    
+  bazarr:
+    labels:
+      - traefik.http.routers.bazarr.middlewares=chain-oauth@docker
+  jackett:
+    labels:
+      - traefik.http.routers.jackett.middlewares=chain-oauth@docker
+  nzbhydra2:
+    labels:
+      - traefik.http.routers.nzbhydra2.middlewares=chain-oauth@docker
+  portainer:
+    labels:
+      - traefik.http.routers.portainer.middlewares=chain-oauth@docker
+  organizr:
+      labels:
+      - traefik.http.routers.organizr.middlewares=chain-oauth@docker
+  duplicati:
+    labels:
+      - traefik.http.routers.duplicati.middlewares=chain-oauth@docker
+  vpn:
+    labels:
+      - traefik.http.routers.vpn.middlewares=chain-oauth@docker
+  deluge:
+    labels:
+      - traefik.http.routers.deluge.middlewares=chain-oauth@docker

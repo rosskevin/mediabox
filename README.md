@@ -1,8 +1,11 @@
 # :tv: Mediabox
 
-![](https://github.com/cristianmiranda/mediabox/workflows/Multimedia%20Stack%20Deployment/badge.svg)
+![](https://github.com/rosskevin/mediabox/workflows/Multimedia%20Stack%20Deployment/badge.svg)
 
 ![](https://i.imgur.com/UZklu5w.jpg)
+
+## TL;DR
+A home media server using docker compose that enables SSL via cloudflare and LetsEncrypt, and allows layering of complexity and features including Single sign on (SSO)
 
 ## What's in the stack?
 
@@ -30,50 +33,92 @@
 * [Docker](https://www.docker.com/)
 * [Docker-Compose](https://docs.docker.com/compose/)
 
-## Setup
-1. Copy `.env.template`
+## Initial setup
+1. Fork this repo
+1. Clone _your_ forked repo
+1. `cd mediabox`
+1. `cp .env.template .env`
+1. Replace variables on `.env` with whatever makes sense to you (follow the comments above each property).  Don't worry, start with the basics and get to the rest later.
+
+## Layered setup
+
+Setting up a home server can be complex.  For all examples, we will assume you are using the domain `example.com`.  You usually need to setup your domain on cloudflare, forward ports on your router and set up dynamic dns.  Before attempting to configure additional applications, this repo is setup to allow you to layer in complexity by minimizing containers started using the `COMPOSE_FILE` variable.  The simple shell script wraps the `docker-compose` command to make it simple to execute `up`, `down`, `restart`, `logs` and most any other typical `docker-compose` command.  See [Usage](#usage) or simply execute `./mb` to see it.
+
+## Layered setup stage 1
+
+Successful completion of this stage means you can access both https://traefik.example.com and https://whoami.example.com, with optional IP whitelist restriction and/or optional Single Sign On.
+
+1. **Set up cloudflare DNS** for your example.com domain
+1. **Set up dynamic DNS** to cloudflare to update the `A` record for your example.com
+1. **Add wildcard CNAME** - Add a `* CNAME` to `@` 
+1. **Increase cloudflare security** - Configure increased security on your cloudflare zone, see [Cloudflare Settings for Traefik Docker: DDNS, CNAMEs, & Tweaks](https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/)
+1. **Verify HTTPS connectivity** - In `.env` set `COMPOSE_FILE=docker-compose.traefik-cloudflare.yml`, `DOMAIN,SSL_ACME_EMAIL,CF_API_EMAIL,CF_API_KEY` and `./mb up` - verify connectivity to both https://traefik.example.com and https://whoami.example.com.  Check logs with `./mb logs traefik` and make sure there are no errors.  `./mb down` when done.
+1. (optional) **Restrict IPs allowed** - Restrict your `IP_WHITELIST_SOURCERANGE` in `.env` to a minimal set of IP addresses, or if you want it public, leave it open by default `0.0.0.0/0`
+1. (optional) **Setup Single Sign On** - Set `COMPOSE_FILE=docker-compose.traefik-cloudflare.yml:docker-compose.traefik-oauth.yml` in `.env` and `./mb up` - set up GCP based SSO via OAUTH. [Some background is available here](https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/) on the external steps, but as-is you only need to make sure your associated ENV variables are populated.  Now verify the auth challenge to both https://traefik.example.com and https://whoami.example.com.  `./mb down` when done.
+
+**All good?  If not do not continue.**
+
+## Layered setup 2
+
+Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) to be able to use hardlinks and/or perform atomic "move" operations instead of "copy+delete" (which takes longer and requires more space).
+
 ```bash
-cp .env.template .env
-```
-2. Replace variables on `.env` with whatever makes sense to you (follow the comments above each property).
-3. It might be a good idea to clone this repo inside the external disk if you plan to use it on different machines/architectures.
-
-## Starting
-```bash
-# Main stack + Unprotected Torrenting
-docker-compose -f docker-compose.yml -f docker-compose.torrents.yml up -d
-
-# Main stack + VPN Protected Torrenting
-docker-compose -f docker-compose.yml -f docker-compose.torrents-on-vpn.yml up -d
-
-# Main stack + VPN Protected Torrenting + Plex HW Transcoding
-docker-compose -f docker-compose.yml -f docker-compose.torrents-on-vpn.yml -f docker-compose.plex-hw.yml up -d
-
-# Main stack + VPN Protected Torrenting + Plex HW Transcoding + Custom domain & SSL certificates
-docker-compose -f docker-compose.yml -f docker-compose.torrents-on-vpn.yml -f docker-compose.plex-hw.yml -f docker-compose.traefik.yml up -d
-
-# Main stack + VPN Protected Torrenting + Plex HW Transcoding + Custom domain & SSL certificates + Calibre Web
-docker-compose -f docker-compose.yml -f docker-compose.torrents-on-vpn.yml -f docker-compose.plex-hw.yml -f docker-compose.traefik.yml -f docker-compose.books.yml up -d
+# My disks layout:
+#
+# data
+# ├── nas
+# │   └── mediabox
+#         ├── downloads
+# │       ├── movies
+# │       └── tv
+# └── ssd
+#     └── mediabox
+#         ├── containers
+#         └── (this) repo
 ```
 
-## Stopping
-Use `docker-compose down` adding `-f` flag with the same compose files you used for starting the stack.
+## Layered setup 3
+Now it is time to determine what services you want to run.  
+
+1. **Add primary applications** - Edit your `.env` and chain `docker-compose.mediabox.yml` on to your `COMPOSE_FILE` variable.  The same as above, `./mb up` then check the logs of the various containers like `./mb logs plex`.  You should now be able to access each by name e.g. https://plex.example.com. 
+1. (optional) **Protect applications with SSO** - Edit your `.env` and chain `docker-compose.mediabox-oauth.yml` on to your `COMPOSE_FILE` variable.  Test again, but this time use an incognito browser (or other browser that has not utilized SSO in steps above) and be sure you receive a challenge for https://plex.example.com
+1. (optional) **Torrents, books, etc** - view the remainder of the compose files and see what services you want.  Using the same methodology, chain the compose file, and test your changes. (I am not using torrents or books, so these may need adjustments, feel free to PR changes)
+
+## Usage
+```sh
+~/mediabox$ ./mb
+usage: mb [help|-h|--help] <subcommand>
+
+optional arguments:
+  help | -h | --help
+    print this message and exit
+
+subcommands:
+  up
+     starts the configured files
+  down
+     stops
+  restart
+     restarts, a combination of stop and start
+  logs
+     shows logs
+  cmd <command>
+     executes an arbitrary docker-compose command. Use "cmd help" to list them
+
+
+The logs subcommand can be appended by flags and specify the container(s). example: 
+
+  mb logs -f --tail 500 plex
+    shows logs only for plex service
+
+
+Be sure to run commands either with sudo, or as a user who is part of the "docker" group
+```
 
 ## Updating
 Watchtower automatically updates all apps (if docker image update is available) at 4 AM every day.
 
-## Custom domain + Let's Encrypt free certificates
-In case you own a domain like `example.com` and you'd like to configure subdomains pointing to your apps like `sonarr.example.com` or `plex.example.com`, do the following:
-1. Modify `.env`:
-```bash
-DOMAIN=example.com
-SSL_ACME_EMAIL=you@mail.com
-```
-2. Forward ports 80 and 443 to your mediabox (you can do that changing your router settings).
-3. Include `docker-compose.traefik.yml` when starting the stack
-4. Check the logs to verify everything is up and running: `docker logs -f traefik`
-
-## VPN
+## VPN (may need updating)
 With OpenVPN you can use any VPN provider following these steps:
 
 1. Download your VPN OpenVPN config files (e.g: [NordVPN TCP/UDP config files](https://nordvpn.com/ovpn/))
@@ -91,31 +136,7 @@ YourVPNP4ssw0rD
 EOT
 ```
 
-## Sonarr/Radarr << Deluge/SABnzbd
-This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup), therefore you'll have to map Sonarr/Radarr volumes to Deluge's/SABnzbd's to be able to use hardlinks and/or perform atomic "move" operations instead of "copy+delete" (which takes longer and requires more space).
+## Credit
+Much of this repo was developed by the original other and contributors at https://github.com/cristianmiranda/mediabox.  I did not choose to PR my changes because the repo was not very active.  While a PR from this repo could be created and applied upstream, I did not want to take the time to justify choices I made including some structural changes.  If someone wants to do that work to push this upstream, I welcome getting my changes contributed to the original body of work.
 
-![](https://i.imgur.com/AHOQVXh.png)
-
-## Architecture
-<p align="center">
-  <img src="https://imgur.com/nsEsoKw.png" />
-</p>
-
-```bash
-# My disks layout:
-#
-# data
-# ├── 2tb
-# │   └── media
-# │       ├── movies
-# │       └── tv
-# ├── 4tb
-# │   └── media
-# │       ├── movies
-# │       └── tv
-# └── ssd
-#     └── mediabox
-#         ├── containers
-#         ├── downloads
-#         └── repo
-```
+Anyway, thanks to @christianmiranda and other contributors from the original repo.
