@@ -19,7 +19,7 @@ networks:
 services:
   traefik:
     image: traefik
-    restart: always
+    restart: unless-stopped
     container_name: traefik
     ports:
       - 80:80
@@ -102,7 +102,7 @@ services:
   # sample for verification of traefik, routing, etc.
   whoami:
     image: traefik/whoami
-    restart: always
+    restart: unless-stopped
     container_name: whoami
     networks:
       - web

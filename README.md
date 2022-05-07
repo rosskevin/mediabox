@@ -5,7 +5,7 @@
 ![](https://i.imgur.com/UZklu5w.jpg)
 
 ## TL;DR
-A home media server using docker compose that enables SSL via cloudflare and LetsEncrypt, and allows layering of complexity and features including Single sign on (SSO)
+A home media server using `docker-compose` that enables SSL wildcard certificates via Cloudflare and LetsEncrypt, and allows layering of complexity and features including Single sign on (SSO) via GCP.
 
 ## What's in the stack?
 
@@ -13,15 +13,17 @@ A home media server using docker compose that enables SSL via cloudflare and Let
 * [Plex](https://www.plex.tv/)
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
-* [Bazarr](https://www.bazarr.media/)
-* [Jackett](https://github.com/Jackett/Jackett)
-* [NZBHydra2](https://github.com/theotherp/nzbhydra2)
+* [Bazarr](https://www.bazarr.media/) - Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements.
+* [Jackett](https://github.com/Jackett/Jackett) - Proxy server that translates queries from apps (Sonarr, Radarr, etc.) into tracker-site-specific queries
+* [NZBHydra2](https://github.com/theotherp/nzbhydra2) - A meta search for newznab indexers and torznab trackers. It provides easy access to newznab indexers and many torznab trackers via Jackett.
 * [SABnzbd](https://sabnzbd.org/)
 * [Deluge](https://deluge-torrent.org/) (built-in dark mode)
 * [Calibre Web](https://github.com/janeczku/calibre-web)
 * [Portainer 2.0](https://www.portainer.io/)
-* [Watchtower](https://github.com/containrrr/watchtower)
 * [Organizr](https://github.com/causefx/Organizr)
+
+## Misc
+* [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
 
 ### Security
 * [OpenVPN](https://github.com/dperson/openvpn-client)

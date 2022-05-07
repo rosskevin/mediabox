@@ -1,0 +1,48 @@
+version: "3.3"
+
+services:
+  # A process for automating Docker container base image updates.
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/.docker/config.json:/config.json
+    command: --label-enable --cleanup --schedule "0 0 4 * * *"
+    restart: unless-stopped
+    
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    networks:
+      - web
+    ports:
+      - 9000:9000
+      - 8000:8000
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.portainer.entrypoints=https
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONTAINERS}/portainer:/data
+
+  portainer_agent:
+    image: portainer/agent
+    container_name: portainer-agent
+    networks:
+      - web
+    ports:
+      - 9001:9001
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    restart: always
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
