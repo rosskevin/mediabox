@@ -7,3 +7,6 @@ services:
   portainer:
     labels:
       - traefik.http.routers.portainer.middlewares=chain-oauth@docker
+  duplicati:
+    labels:
+      - traefik.http.routers.duplicati.middlewares=chain-oauth@docker

@@ -20,16 +20,16 @@ A home media server using `docker-compose` that enables SSL wildcard certificate
 * [Deluge](https://deluge-torrent.org/) (built-in dark mode)
 * [Calibre Web](https://github.com/janeczku/calibre-web)
 * [Portainer 2.0](https://www.portainer.io/)
-* [Organizr](https://github.com/causefx/Organizr)
+* [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services.
 
 ## Misc
 * [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
+* [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups online
 
 ### Security
 * [OpenVPN](https://github.com/dperson/openvpn-client)
 * [Traefik](https://containo.us/traefik/)
 * [Let's Encrypt Automatic SSL certificates](https://letsencrypt.org/)
-* [Duplicati](https://www.duplicati.com/)
 
 ## Prerequisites
 * [Docker](https://www.docker.com/)

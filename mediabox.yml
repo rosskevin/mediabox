@@ -177,6 +177,7 @@ services:
       - ${DOWNLOADS}/usenet:/downloads
     restart: unless-stopped
 
+  # Organize a single page with tabs to manage all services.
   organizr:
     image: organizr/organizr
     container_name: organizr
@@ -198,24 +199,3 @@ services:
       - ${CONTAINERS}/organizr:/config
     restart: unless-stopped
 
-  duplicati:
-    image: linuxserver/duplicati
-    container_name: duplicati
-    networks:
-      - web
-    ports:
-      - 8200:8200
-    labels:
-      - com.centurylinklabs.duplicati.enable=true
-      - traefik.enable=true
-      - traefik.http.routers.duplicati.entrypoints=https
-      - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${CONTAINERS}/duplicati/config:/config
-      - ${CONTAINERS}/duplicati/backups:/backups
-      - /:/source
-    restart: unless-stopped
