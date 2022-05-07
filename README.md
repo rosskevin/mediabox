@@ -58,26 +58,27 @@ Successful completion of this stage means you can access both https://traefik.ex
 
 **All good?  If not do not continue.**
 
-## Layered setup 2
+## Layered setup stage 2
 
-Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) to be able to use hardlinks and/or perform atomic "move" operations instead of "copy+delete" (which takes longer and requires more space).
+Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) and [this reddit post](https://www.reddit.com/r/usenet/wiki/docker#wiki_the_best_docker_setup) to be able to use hardlinks and/or perform atomic `move` operations instead of `copy+delete` (which takes longer and requires more space).
 
 ```bash
-# My disks layout:
-#
-# data
 # ├── nas
 # │   └── mediabox
-#         ├── downloads
+# |       ├── backups
+# |       ├── downloads
+# |       |   ├── nzbhydra2
+# |       |   ├── torrents
+# |       |   └── usenet
 # │       ├── movies
+# │       ├── pictures
 # │       └── tv
 # └── ssd
-#     └── mediabox
-#         ├── containers
-#         └── (this) repo
+#     ├── containers
+#     └── (this) repo
 ```
 
-## Layered setup 3
+## Layered setup stage 3
 Now it is time to determine what services you want to run.  
 
 1. **Add primary applications** - Edit your `.env` and chain `docker-compose.mediabox.yml` on to your `COMPOSE_FILE` variable.  The same as above, `./mb up` then check the logs of the various containers like `./mb logs plex`.  You should now be able to access each by name e.g. https://plex.example.com. 
