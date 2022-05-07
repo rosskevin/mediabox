@@ -1,7 +1,7 @@
 version: "3.3"
 
 #
-#
+# This file enables SSO via Google Cloud OAUTH.  Additionally, it layers in rate limiting.
 #
 # @credit https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/
 #
@@ -11,36 +11,23 @@ services:
       # -----------------------------
       # Define reusable middlewares
       # -----------------------------
-
-      # oauth
-      # - traefik.http.middlewares.sso.forwardauth.address=https://oauth.${DOMAIN}${OAUTH_PATH}
-      # - traefik.http.middlewares.sso.forwardauth.address=http://oauth:4181${OAUTH_PATH}
-      
-      
       - traefik.http.middlewares.sso.forwardauth.address=http://oauth:4181
-      # - traefik.http.middlewares.sso.forwardauth.address=https://oauth.${DOMAIN}${OAUTH_PATH}
-      # - traefik.http.middlewares.sso.forwardauth.address=https://oauth.${DOMAIN}
-
       - traefik.http.middlewares.sso.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.sso.forwardauth.authResponseHeaders=X-Forwarded-User
 
       # rate limit
-      # - traefik.http.middlewares.rate-limit.rateLimit.average=100
-      # - traefik.http.middlewares.rate-limit.rateLimit.burst=50
+      - traefik.http.middlewares.rate-limit.rateLimit.average=100
+      - traefik.http.middlewares.rate-limit.rateLimit.burst=50
 
       # -----------------------------
       # Define chain
       # -----------------------------
-      # rate-limit,sso
-      # - traefik.http.middlewares.chain-oauth.chain.middlewares=sso
+      - traefik.http.middlewares.chain-oauth.chain.middlewares=rate-limit,sso
 
       # -----------------------------
       # Apply middlewares to dashboard UI
       # -----------------------------
-      # - traefik.http.routers.traefik.middlewares=chain-oauth@docker
-      - traefik.http.routers.traefik.middlewares=sso@docker
-
-
+      - traefik.http.routers.traefik.middlewares=chain-oauth@docker
 
   oauth:
     restart: always
@@ -54,16 +41,11 @@ services:
       - PROVIDERS_GOOGLE_CLIENT_ID=${GCP_OAUTH_CLIENT_ID}
       - PROVIDERS_GOOGLE_CLIENT_SECRET=${GCP_OAUTH_CLIENT_SECRET}
       - SECRET=${OAUTH_SECRET}
-      # - CONFIG=/config
       - COOKIE_DOMAIN=${DOMAIN}
       - AUTH_HOST=oauth.${DOMAIN}
       - URL_PATH=${OAUTH_PATH}
       - LOG_LEVEL=debug
       - LOG_FORMAT=pretty
-      # - DEFAULT_ACTION=auth
-      # - DEFAULT_PROVIDER=google
-      # - WHITELIST=${OAUTH_WHITELIST}
-      # - LIFETIME=2592000 # 30 days      
     labels:
       - traefik.enable=true
       # -----------------------------
@@ -71,28 +53,16 @@ services:
       # -----------------------------
       - traefik.http.routers.oauth.entrypoints=https
       # -----------------------------
-      # Middlewares
-      # -----------------------------
-      # - traefik.http.routers.oauth.middlewares=chain-oauth@docker
-      # - traefik.http.routers.oauth.middlewares=sso@docker
-      # -----------------------------
       # HTTP Services
       # -----------------------------
       - traefik.http.services.oauth.loadbalancer.server.port=4181
       - traefik.http.routers.oauth.service=oauth
-      #--
-      # - traefik.http.middlewares.oauth.forwardauth.address: http://oauth:4181
-      # - traefik.http.middlewares.oauth.forwardauth.authResponseHeaders: X-Forwarded-User
-      # - traefik.http.middlewares.oauth.forwardauth.trustForwardHeader: "true"
-      # - traefik.http.routers.oauth.middlewares: oauth
     networks:
       - web
 
   whoami:
     labels:
-      # - traefik.http.routers.whoami.middlewares=chain-oauth@docker
-      - traefik.http.routers.whoami.middlewares=sso@docker
-
+      - traefik.http.routers.whoami.middlewares=chain-oauth@docker
 
   # traefik:
   #   labels:

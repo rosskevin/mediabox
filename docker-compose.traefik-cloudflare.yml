@@ -1,10 +1,13 @@
 version: "3.3"
 
 #
-# An alternative to `docker-compose-traefik.yml`, this file uses cloudflare for LetsEncrypt DNS challenge and provides a wildcard cert for all subdomains.
+# This file uses cloudflare for LetsEncrypt DNS challenge and provides a wildcard cert for all subdomains.
 #
 # This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
 #   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
+#
+# This pattern can utilize HTTPS and allow only specific IPs to access via the IP_WHITELIST_SOURCERANGE.  For simpler setups, this means
+#   that setting up OAUTH isn't an absolute necessity.
 #
 # @credit to https://github.com/htpcBeginner/docker-traefik for better traefik settings.
 #
@@ -25,11 +28,11 @@ services:
       - --global.sendAnonymousUsage=true
       - --api.dashboard=true
       - --api.debug=true      
-      - --log.level=DEBUG
+      - --log.level=INFO
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
-      
+
       # Set default rule to use container name as subomain e.g. whoami.example.com
       - --providers.docker.defaultRule=Host(`{{ index .Labels "com.docker.compose.service" }}.${DOMAIN}`)
 
