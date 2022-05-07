@@ -32,6 +32,8 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
+      # set default rule to use container name as subomain e.g. whoami.example.com
+      - --providers.docker.defaultRule=Host(`{{ index .Labels "com.docker.compose.service" }}.${DOMAIN}`)
 
       # Entrypoints for HTTP, HTTPS, and NX (TCP + UDP)
       - --entrypoints.http.address=:80
@@ -68,15 +70,15 @@ services:
       # -----------------------------
       # HTTP-to-HTTPS Redirect
       # -----------------------------
-      - "traefik.http.routers.http-catchall.entrypoints=http"
-      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # - "traefik.http.routers.http-catchall.entrypoints=http"
+      # - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      # - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # -----------------------------
       # HTTP Routers
       # -----------------------------
       - "traefik.http.routers.traefik.entrypoints=https"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      # - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
       # -----------------------------
       # Services - API
       # -----------------------------
@@ -107,6 +109,5 @@ services:
       - web
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)
       - traefik.http.routers.whoami.entrypoints=https
       # - traefik.http.routers.whoami.middlewares=internalwhitelist@docker

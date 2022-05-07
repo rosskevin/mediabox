@@ -11,7 +11,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
-      - traefik.http.routers.deluge.rule=Host(`deluge.${DOMAIN}`)
       - traefik.http.routers.deluge.entrypoints=https
       - traefik.http.routers.deluge.middlewares=internalwhitelist@docker
     environment:
