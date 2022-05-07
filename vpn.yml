@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+  vpn:
+    image: dperson/openvpn-client
+    container_name: vpn
+    cap_add:
+      - net_admin
+    environment:
+      - DNS=${VPN_DNS}
+      - TZ=${TIMEZONE}
+    networks:
+      - web
+    read_only: false
+    tmpfs:
+      - /run
+      - /tmp
+    restart: unless-stopped
+    security_opt:
+      - label:disable
+    stdin_open: true
+    tty: true
+    volumes:
+      - /dev/net:/dev/net:z
+      - ${CONTAINERS}/openvpn:/vpn
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      #
+      # Exposed containers
+      # See more @ https://community.containo.us/t/docker-compose-with-network-mode-service-service-name/3395
+      #
+      - traefik.http.routers.deluge.entrypoints=https
+      - traefik.http.routers.vpn.middlewares=internalwhitelist@docker
+    ports:
+      - 8112:8112 # Deluge

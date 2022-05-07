@@ -1,0 +1,9 @@
+version: "3.3"
+
+#
+# This file enables SSO via Google Cloud OAUTH.  Additionally, it layers in rate limiting.
+#
+services:
+  vpn:
+    labels:
+      - traefik.http.routers.vpn.middlewares=chain-oauth@docker

@@ -28,9 +28,3 @@ services:
   organizr:
       labels:
       - traefik.http.routers.organizr.middlewares=chain-oauth@docker
-  vpn:
-    labels:
-      - traefik.http.routers.vpn.middlewares=chain-oauth@docker
-  deluge:
-    labels:
-      - traefik.http.routers.deluge.middlewares=chain-oauth@docker

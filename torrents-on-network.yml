@@ -1,0 +1,9 @@
+version: "3.3"
+
+# @usage torrents.yml:torrents-on-network.yml (and don't forget to layer in torrents-oauth.yml if you are using SSO)
+services:
+  deluge:
+    networks:
+      - web
+    ports: 
+      - 8112:8112
