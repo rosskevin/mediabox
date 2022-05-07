@@ -1,7 +1,7 @@
 version: "3.3"
 
+# Enables Hardware Transcoding if available
 services:
   plex:
     devices:
-      # Enables Hardware Transcoding if available
       - /dev/dri:/dev/dri

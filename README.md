@@ -12,17 +12,17 @@ A home media server using `docker-compose` that enables SSL wildcard certificate
 NOTE: These are listed in the order I recommend they are layered and tested during setup.
 
 ### Baseline
-`traefik-cloudflare.yml` and optional `traefik-oauth.yml`
+<sub>`traefik-cloudflare.yml` and optional `traefik-oauth.yml`</sub>
 * [Traefik](https://containo.us/traefik/) - Service ingress, routing, etc, handles SSL certificates via DNS-01 challenge and LetsEncrypt
 
 ### Misc
-`misc.yml` and optional `misc-oauth.yml`
+<sub>`misc.yml` and optional `misc-oauth.yml`</sub>
 * [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
 * [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups online
 * [Portainer](https://www.portainer.io/)
 
 ### Multimedia
-`multimedia.yml` and `multimedia-oauth.yml`
+<sub>`multimedia.yml`, optional `multimedia-oauth.yml` and `plex-hw.yml`</sub>
 * [Plex](https://www.plex.tv/)
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
