@@ -9,7 +9,20 @@ A home media server using `docker-compose` that enables SSL wildcard certificate
 
 ## What's in the stack?
 
+NOTE: These are listed in the order I recommend they are layered and tested during setup.
+
+### Baseline
+`traefik-cloudflare.yml` and optional `traefik-oauth.yml`
+* [Traefik](https://containo.us/traefik/) - Service ingress, routing, etc, handles SSL certificates via DNS-01 challenge and LetsEncrypt
+
+### Misc
+`misc.yml` and optional `misc-oauth.yml`
+* [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
+* [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups online
+* [Portainer](https://www.portainer.io/)
+
 ### Multimedia
+`multimedia.yml` and `multimedia-oauth.yml`
 * [Plex](https://www.plex.tv/)
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
@@ -17,19 +30,13 @@ A home media server using `docker-compose` that enables SSL wildcard certificate
 * [Jackett](https://github.com/Jackett/Jackett) - Proxy server that translates queries from apps (Sonarr, Radarr, etc.) into tracker-site-specific queries
 * [NZBHydra2](https://github.com/theotherp/nzbhydra2) - A meta search for newznab indexers and torznab trackers. It provides easy access to newznab indexers and many torznab trackers via Jackett.
 * [SABnzbd](https://sabnzbd.org/)
-* [Deluge](https://deluge-torrent.org/) (built-in dark mode)
-* [Calibre Web](https://github.com/janeczku/calibre-web)
-* [Portainer 2.0](https://www.portainer.io/)
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services.
 
-## Misc
-* [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
-* [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups online
 
-### Security
-* [OpenVPN](https://github.com/dperson/openvpn-client)
-* [Traefik](https://containo.us/traefik/)
-* [Let's Encrypt Automatic SSL certificates](https://letsencrypt.org/)
+### Optional additions
+* [OpenVPN](https://github.com/dperson/openvpn-client) - vpn client
+* [Deluge](https://deluge-torrent.org/) - torrent downloads
+* [Calibre Web](https://github.com/janeczku/calibre-web) - books
 
 ## Prerequisites
 * [Docker](https://www.docker.com/)
