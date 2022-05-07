@@ -38,6 +38,8 @@ services:
       # Apply middlewares to dashboard UI
       # -----------------------------
       # - traefik.http.routers.traefik.middlewares=chain-oauth@docker
+      - traefik.http.routers.traefik.middlewares=sso@docker
+
 
 
   oauth:

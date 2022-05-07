@@ -21,24 +21,21 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080 # dashboard UI (enabled by --api.insecure=true)
     command:
       - --global.sendAnonymousUsage=true
-
       - --api.dashboard=true
       - --api.debug=true      
-      #- --api.insecure=true
-      - --log.level=INFO
+      - --log.level=DEBUG
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
-      # set default rule to use container name as subomain e.g. whoami.example.com
+      
+      # Set default rule to use container name as subomain e.g. whoami.example.com
       - --providers.docker.defaultRule=Host(`{{ index .Labels "com.docker.compose.service" }}.${DOMAIN}`)
 
       # Entrypoints for HTTP, HTTPS, and NX (TCP + UDP)
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
-      - --entryPoints.traefik.address=:8080
 
       # Setup tls use for all services
       - --entrypoints.https.http.tls.certresolver=cloudflare-resolver
@@ -55,7 +52,7 @@ services:
       - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesresolvers.cloudflare-resolver.acme.email=${SSL_ACME_EMAIL}
       - --certificatesresolvers.cloudflare-resolver.acme.storage=etc/traefik/acme/acme.json
-      # enable the following staging server initially to test successful issuance of certificates (and avoid being rate limited due to errors)
+      # Enable the following staging server initially to test successful issuance of certificates (and avoid being rate limited due to errors)
       # - --certificatesresolvers.cloudflare-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
@@ -70,25 +67,24 @@ services:
       # -----------------------------
       # HTTP-to-HTTPS Redirect
       # -----------------------------
-      # - "traefik.http.routers.http-catchall.entrypoints=http"
-      # - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
-      # - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-      # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # - traefik.http.routers.http-catchall.entrypoints=http
+      # - traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)
+      # - traefik.http.routers.http-catchall.middlewares=redirect-to-https
+      # - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
       # -----------------------------
       # HTTP Routers
       # -----------------------------
-      - "traefik.http.routers.traefik.entrypoints=https"
-      # - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      - traefik.http.routers.traefik.entrypoints=https
       # -----------------------------
       # Services - API
       # -----------------------------
-      - "traefik.http.routers.traefik.service=api@internal"
+      - traefik.http.routers.traefik.service=api@internal
       # -----------------------------
       # Healthcheck/ping
       # -----------------------------
-      #- "traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)"
-      #- "traefik.http.routers.ping.tls=true"
-      #- "traefik.http.routers.ping.service=ping@internal"
+      #- traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)
+      #- traefik.http.routers.ping.tls=true
+      #- traefik.http.routers.ping.service=ping@internal
 
       # -----------------------------
       # Define reusable middlewares
@@ -110,4 +106,4 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=https
-      # - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
+      - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
