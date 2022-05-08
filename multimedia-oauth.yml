@@ -16,9 +16,6 @@ services:
   radarr:
     labels:
       - traefik.http.routers.radarr.middlewares=chain-oauth@docker    
-  bazarr:
-    labels:
-      - traefik.http.routers.bazarr.middlewares=chain-oauth@docker
   prowlarr:
     labels:
       - traefik.http.routers.prowlarr.middlewares=chain-oauth@docker
