@@ -27,10 +27,8 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
 * [Prowlarr](https://wiki.servarr.com/prowlarr) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required
-* [Bazarr](https://www.bazarr.media/) - Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
-
 
 ### Optional additions
 NOTE: updates likely needed here.
