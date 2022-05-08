@@ -12,6 +12,7 @@ services:
     command: --label-enable --cleanup --schedule "0 0 4 * * *"
     restart: unless-stopped
     
+  # Web interface to view/manage docker
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
@@ -66,6 +67,6 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONTAINERS}/duplicati/config:/config
-      - ${CONTAINERS}/duplicati/backups:/backups
+      - ${BACKUPS}/duplicati:/backups
       - /:/source
     restart: unless-stopped
