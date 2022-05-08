@@ -28,6 +28,8 @@ services:
       - PGID=${PGID}
       - VERSION=docker
       - ADVERTISE_IP="https://plex.${DOMAIN}:443"
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:plex
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/plex/config:/config
     restart: unless-stopped
@@ -51,6 +53,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sonarr
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sonarr/config:/config
     restart: unless-stopped
@@ -74,6 +78,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:radarr
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/radarr/config:/config
     restart: unless-stopped
@@ -97,6 +103,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:bazarr
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/bazarr/config:/config
     restart: unless-stopped
@@ -104,19 +112,24 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:develop
     container_name: prowlarr
+    networks:
+      - web    
+    ports:
+      - 9696:9696
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.prowlarr.entrypoints=https
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - traefik.http.routers.prowlarr.middlewares=internalwhitelist@docker    
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:prowlarr
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/prowlarr/config:/config
-    ports:
-      - 9696:9696
     restart: unless-stopped
 
   sabnzbd:
@@ -137,6 +150,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sabnzbd
+      - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sabnzbd/config:/config
       - ${DOWNLOADS}/sabnzbd:/downloads
