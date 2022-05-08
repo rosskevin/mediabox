@@ -17,8 +17,8 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 
 ### Misc
 <sub>`misc.yml` and optional `misc-oauth.yml`</sub>
-* [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates.
-* [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups online
+* [Watchtower](https://github.com/containrrr/watchtower) - A process for automating Docker container base image updates
+* [Duplicati](https://www.duplicati.com/) - Backup software to store encrypted backups
 * [Portainer](https://www.portainer.io/)
 
 ### Multimedia
@@ -26,17 +26,16 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 * [Plex](https://www.plex.tv/)
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
-* [Bazarr](https://www.bazarr.media/) - Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements.
-* [Jackett](https://github.com/Jackett/Jackett) - Proxy server that translates queries from apps (Sonarr, Radarr, etc.) into tracker-site-specific queries
-* [NZBHydra2](https://github.com/theotherp/nzbhydra2) - A meta search for newznab indexers and torznab trackers. It provides easy access to newznab indexers and many torznab trackers via Jackett.
-* [SABnzbd](https://sabnzbd.org/)
-* [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services.
+* [Prowlarr](https://wiki.servarr.com/prowlarr) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required
+* [Bazarr](https://www.bazarr.media/) - Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles based on your requirements
+* [SABnzbd](https://sabnzbd.org/) - Usenet downloader
+* [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
 
 
 ### Optional additions
+NOTE: updates likely needed here.
 * [OpenVPN](https://github.com/dperson/openvpn-client) - vpn client
 * [Deluge](https://deluge-torrent.org/) - torrent downloads
-* [Calibre Web](https://github.com/janeczku/calibre-web) - books
 
 ## Prerequisites
 * [Docker](https://www.docker.com/)
@@ -47,7 +46,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 1. Clone _your_ forked repo
 1. `cd mediabox`
 1. `cp .env.template .env`
-1. Replace variables on `.env` with whatever makes sense to you (follow the comments above each property).  Don't worry, start with the basics and get to the rest later.
+1. Replace variables on `.env` with whatever makes sense to you (follow the comments above each property).  Don't worry, start with the basics and get to the rest later
 
 ## Layered setup
 
@@ -76,7 +75,7 @@ Plan your disk layout and set up your NFS (or other) disk mounts (beyond the sco
 # │   └── mediabox
 # |       ├── backups
 # |       ├── downloads
-# |       |   ├── nzbhydra2
+# |       |   ├── nzbhydra
 # |       |   ├── torrents
 # |       |   └── usenet
 # │       ├── movies

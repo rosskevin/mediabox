@@ -19,12 +19,9 @@ services:
   bazarr:
     labels:
       - traefik.http.routers.bazarr.middlewares=chain-oauth@docker
-  jackett:
+  prowlarr:
     labels:
-      - traefik.http.routers.jackett.middlewares=chain-oauth@docker
-  nzbhydra2:
-    labels:
-      - traefik.http.routers.nzbhydra2.middlewares=chain-oauth@docker
+      - traefik.http.routers.prowlarr.middlewares=chain-oauth@docker
   organizr:
-      labels:
+    labels:
       - traefik.http.routers.organizr.middlewares=chain-oauth@docker

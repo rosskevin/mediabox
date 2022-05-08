@@ -24,7 +24,7 @@ jobs:
         env:
           PUID: 1000
           PGID: 1000
-          DATA: /data
+          # DATA: /data
           CONTAINERS: /data/containers
           DOWNLOADS: /data/downloads
           ORGANIZR_TAG: latest

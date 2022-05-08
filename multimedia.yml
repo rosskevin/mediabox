@@ -30,7 +30,6 @@ services:
       - ADVERTISE_IP="https://plex.${DOMAIN}:443"
     volumes:
       - ${CONTAINERS}/plex/config:/config
-      - ${DATA}:/data
     restart: unless-stopped
 
   sonarr:
@@ -42,8 +41,7 @@ services:
       - 8989:8989
     depends_on:
       - sabnzbd
-      - jackett
-      - nzbhydra2
+      - prowlarr
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -55,8 +53,6 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONTAINERS}/sonarr/config:/config
-      - ${CONTAINERS}/sonarr/empty:/downloads # Not used
-      - ${DATA}:/data
     restart: unless-stopped
 
   radarr:
@@ -68,8 +64,7 @@ services:
       - 7878:7878
     depends_on:
       - sabnzbd
-      - jackett
-      - nzbhydra2
+      - prowlarr
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -81,8 +76,6 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONTAINERS}/radarr/config:/config
-      - ${CONTAINERS}/radarr/empty:/downloads # Not used
-      - ${DATA}:/data
     restart: unless-stopped
 
   bazarr:
@@ -106,52 +99,24 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONTAINERS}/bazarr/config:/config
-      - ${DATA}:/data
     restart: unless-stopped
 
-  # Proxy server that translates queries from apps (Sonarr, Radarr, etc.) into tracker-site-specific queries
-  jackett:
-    image: linuxserver/jackett
-    container_name: jackett
-    networks:
-      - web
-    ports:
-      - 9117:9117
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
-      - traefik.http.routers.jackett.entrypoints=https
-      - traefik.http.routers.jackett.middlewares=internalwhitelist@docker
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TIMEZONE}
-      - AUTO_UPDATE=true
-    volumes:
-      - ${CONTAINERS}/jackett/config:/config
-    restart: unless-stopped
-
-  # A meta search for newznab indexers and torznab trackers. It provides easy access to newznab indexers and many 
-  #   torznab trackers via Jackett.
-  nzbhydra2:
-    image: linuxserver/nzbhydra2
-    container_name: nzbhydra2
-    networks:
-      - web
-    ports:
-      - 5076:5076
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
-      - traefik.http.routers.nzbhydra.entrypoints=https
-      - traefik.http.routers.nzbhydra2.middlewares=internalwhitelist@docker
+      - traefik.http.routers.prowlarr.entrypoints=https
+      - traefik.http.routers.prowlarr.middlewares=internalwhitelist@docker    
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONTAINERS}/nzbhydra2/config:/config
-      - ${DOWNLOADS}/nzbhydra2:/downloads
+      - ${CONTAINERS}/prowlarr/config:/config
+    ports:
+      - 9696:9696
     restart: unless-stopped
 
   sabnzbd:
@@ -174,7 +139,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONTAINERS}/sabnzbd/config:/config
-      - ${DOWNLOADS}/usenet:/downloads
+      - ${DOWNLOADS}/sabnzbd:/downloads
     restart: unless-stopped
 
   # Organize a single page with tabs to manage all services.
