@@ -23,6 +23,7 @@ services:
       # Define chain
       # -----------------------------
       - traefik.http.middlewares.chain-oauth.chain.middlewares=rate-limit,sso
+      - traefik.http.middlewares.chain-no-auth.chain.middlewares=rate-limit
 
       # -----------------------------
       # Apply middlewares to dashboard UI

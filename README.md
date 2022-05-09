@@ -23,11 +23,11 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 
 ### Multimedia
 <sub>`multimedia.yml`, optional `multimedia-oauth.yml` and `plex-hw.yml`</sub>
-* [Plex](https://www.plex.tv/)
+* [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://sonarr:8989, http://sabnzbd:8080 (uses oauth bypass)
+* [SABnzbd](https://sabnzbd.org/) - Usenet downloader
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
-* [Prowlarr](https://wiki.servarr.com/prowlarr) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required
-* [SABnzbd](https://sabnzbd.org/) - Usenet downloader
+* [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to https://<my-local-ip>:32400/web first to complete the setup wizard.  You may then connec later via https://plex.example.com
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
 
 ### Optional additions
@@ -68,7 +68,7 @@ Successful completion of this stage means you can access both https://traefik.ex
 
 Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) and [this reddit post](https://www.reddit.com/r/usenet/wiki/docker#wiki_the_best_docker_setup) to be able to use hardlinks and/or perform atomic `move` operations instead of `copy+delete` (which takes longer and requires more space).
 
-```bash
+```sh
 # ├── nas
 # │   └── mediabox
 # |       ├── backups
@@ -82,6 +82,16 @@ Plan your disk layout and set up your NFS (or other) disk mounts (beyond the sco
 # └── ssd
 #     ├── containers
 #     └── (this) repo
+#
+# CONTAINERS : Application docker container storage - SSD recommended.  Intend to backup this to the BACKUPS.
+# DOWNLOADS  : This directory will hold incomplete and completed downloads for each type of source.
+# MEDIA      : Directory that holds tv and movies
+# BACKUPS    : Target location for backups (can also use online services instead inside duplicati)
+#
+CONTAINERS=/containers
+DOWNLOADS=/mnt/nfs/mediabox/downloads
+MEDIA=/mnt/nfs/mediabox
+BACKUPS=/mnt/nfs/mediabox/backups
 ```
 
 ## Layered setup stage 3

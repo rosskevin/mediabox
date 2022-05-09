@@ -7,16 +7,7 @@ services:
     networks:
       - web
     ports:
-      - 32400:32400/tcp
-      - 32400:32400/udp
-      - 3005:3005/tcp
-      - 8324:8324/tcp
-      - 32469:32469/tcp
-      - 1900:1900/udp
-      - 32410:32410/udp
-      - 32412:32412/udp
-      - 32413:32413/udp
-      - 32414:32414/udp
+      - 32400:32400
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -27,11 +18,14 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - VERSION=docker
-      - ADVERTISE_IP="https://plex.${DOMAIN}:443"
       - DOCKER_MODS=ghcr.io/gilbn/theme.park:plex
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/plex/config:/config
+      - ${MEDIA}/fitness:/fitness
+      - ${MEDIA}/movies:/movies
+      - ${MEDIA}/racing:/racing
+      - ${MEDIA}/tv:/tv
     restart: unless-stopped
 
   sonarr:
@@ -113,8 +107,8 @@ services:
     networks:
       - web
     ports:
-      - 9050:8080
-      - 9051:9090
+      - 8080:8080 # https port set as the loadbalancer.server.port below - may be protected by authentication
+      # - 9080:8080 # http port, not protected, to be used for local api
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -129,7 +123,8 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sabnzbd/config:/config
-      - ${DOWNLOADS}/sabnzbd:/downloads
+      - ${DOWNLOADS}/sabnzbd/complete:/downloads
+      - ${DOWNLOADS}/sabnzbd/incomplete:/incomplete-downloads 
     restart: unless-stopped
 
   # Organize a single page with tabs to manage all services.
