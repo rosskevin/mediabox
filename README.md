@@ -73,6 +73,10 @@ Successful completion of this stage means you can access both https://traefik.ex
 
 Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) and [this reddit post](https://www.reddit.com/r/usenet/wiki/docker#wiki_the_best_docker_setup) to be able to use hardlinks and/or perform atomic `move` operations instead of `copy+delete` (which takes longer and requires more space).
 
+TL;DR from [Trash guides "how to set up for docker"](https://trash-guides.info/How-to-setup-for/Docker/):
+
+> The paths you use on the inside matter. Because of how Docker’s volumes work, passing in two or three volumes such as the commonly suggested /tv, /movies and /downloads makes them look like two or three file systems, even if they aren’t. This means hard links won’t work and instead of an instant move, a slower and more I/O intensive copy + delete is used.
+
 ```sh
 # My disks layout:
 #
