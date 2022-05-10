@@ -22,10 +22,7 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/plex/config:/config
-      - ${MEDIA}/fitness:/fitness
-      - ${MEDIA}/movies:/movies
-      - ${MEDIA}/racing:/racing
-      - ${MEDIA}/tv:/tv
+      - ${DATA}:/data
     restart: unless-stopped
 
   sonarr:
@@ -51,6 +48,7 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sonarr/config:/config
+      - ${DATA}:/data
     restart: unless-stopped
 
   radarr:
@@ -76,6 +74,7 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/radarr/config:/config
+      - ${DATA}:/data
     restart: unless-stopped
 
   prowlarr:
@@ -123,8 +122,8 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sabnzbd/config:/config
-      - ${DOWNLOADS}/sabnzbd/complete:/downloads
-      - ${DOWNLOADS}/sabnzbd/incomplete:/incomplete-downloads 
+      - ${DATA}/usenet:/downloads
+      - ${DATA}/usenet/incomplete:/incomplete-downloads 
     restart: unless-stopped
 
   # Organize a single page with tabs to manage all services.

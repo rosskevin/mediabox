@@ -23,7 +23,12 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 
 ### Multimedia
 <sub>`multimedia.yml`, optional `multimedia-oauth.yml` and `plex-hw.yml`</sub>
-* [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://sonarr:8989, http://sabnzbd:8080 (uses oauth bypass)
+* [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://sonarr:8989, http://sabnzbd:8080 (uses oauth bypass).  Once up, be sure to visit:
+   - `settings > network > show advanced`: 
+      - `Custom server access URLs` = https://plex.example.com
+      - Uncheck `Enable relay` to serve direct
+   - `Remote access`
+      - `Disable remote access` (confusing I know, but this just disables plex.tv intervention.  You will still have access directly via https://plex.example.com)
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
@@ -69,28 +74,33 @@ Successful completion of this stage means you can access both https://traefik.ex
 Plan your disk layout and set up your NFS (or other) disk mounts (beyond the scope of this readme).  This setup follows best practices mentioned on [this article](https://wiki.servarr.com/Docker_Guide#The_Best_Docker_Setup) and [this reddit post](https://www.reddit.com/r/usenet/wiki/docker#wiki_the_best_docker_setup) to be able to use hardlinks and/or perform atomic `move` operations instead of `copy+delete` (which takes longer and requires more space).
 
 ```sh
+# My disks layout:
+#
 # ├── nas
-# │   └── mediabox
+# │   └── mediabox (mounted as /data)
 # |       ├── backups
-# |       ├── downloads
-# |       |   ├── nzbhydra
-# |       |   ├── torrents
-# |       |   └── usenet
-# │       ├── movies
-# │       ├── pictures
-# │       └── tv
+# |       ├── torrents
+# │       |   ├── movies
+# │       |   ├── pictures
+# │       |   └── tv
+# |       └── usenet
+# │       |   ├── movies
+# │       |   ├── pictures
+# │       |   └── tv
+# |       └── media
+# │           ├── movies
+# │           ├── pictures
+# │           └── tv
 # └── ssd
 #     ├── containers
-#     └── (this) repo
+#     └── repo
 #
 # CONTAINERS : Application docker container storage - SSD recommended.  Intend to backup this to the BACKUPS.
-# DOWNLOADS  : This directory will hold incomplete and completed downloads for each type of source.
-# MEDIA      : Directory that holds tv and movies
+# DATA       : This directory will be the top level mount point mounted in containers.  Configure relative paths inside the applications.
 # BACKUPS    : Target location for backups (can also use online services instead inside duplicati)
 #
 CONTAINERS=/containers
-DOWNLOADS=/mnt/nfs/mediabox/downloads
-MEDIA=/mnt/nfs/mediabox
+DATA=/mnt/nfs/mediabox
 BACKUPS=/mnt/nfs/mediabox/backups
 ```
 

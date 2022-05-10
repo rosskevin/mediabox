@@ -42,6 +42,10 @@ logs() {
     cmd logs "$@"
 }
 
+pull() {
+    cmd pull "$@"
+}
+
 printhelp() {
     me=$(basename "${BASH_SOURCE}")
     echo "usage: ${me} [help|-h|--help] <subcommand>"
@@ -57,10 +61,12 @@ printhelp() {
     echo "     stops"
     echo "  restart"
     echo "     restarts, a combination of stop and start"
+    echo "  pull"
+    echo "     pulls updated images"
     echo "  logs"
     echo "     shows logs"
     echo "  cmd <command>"
-    echo "     executes an arbitrary docker-compose command. Use \"cmd help\" to list them"
+    echo "     executes any arbitrary docker-compose command. Use \"cmd help\" to list them"
     echo ""
     echo ""
     echo "The logs subcommand can be appended by flags and specify the container(s). example: "
