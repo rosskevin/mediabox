@@ -67,6 +67,8 @@ printhelp() {
     echo "     restarts, a combination of stop and start"
     echo "  pull"
     echo "     pulls updated images"
+    echo "  shell"
+    echo "     open a shell to the targeted container"
     echo "  logs"
     echo "     shows logs"
     echo "  cmd <command>"
