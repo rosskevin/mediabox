@@ -46,6 +46,10 @@ pull() {
     cmd pull "$@"
 }
 
+shell() {
+    cmd exec "$@" bash
+}
+
 printhelp() {
     me=$(basename "${BASH_SOURCE}")
     echo "usage: ${me} [help|-h|--help] <subcommand>"
