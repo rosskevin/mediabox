@@ -29,7 +29,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
       - Uncheck `Enable relay` to serve direct
    - `Remote access`
       - `Disable remote access` (confusing I know, but this just disables plex.tv intervention.  You will still have access directly via https://plex.example.com)
-* [SABnzbd](https://sabnzbd.org/) - Usenet downloader
+* [SABnzbd](https://sabnzbd.org/) - Usenet downloader.  Use top level `DATA` env variable to avoid needing to specify "Remote Path" it the *arr applications.  This makes it easier to hardlink.  See #Layered setup stage 2
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
 * [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to https://<my-local-ip>:32400/web first to complete the setup wizard.  You may then connec later via https://plex.example.com

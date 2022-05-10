@@ -122,8 +122,7 @@ services:
       - TP_THEME=${TP_THEME}
     volumes:
       - ${CONTAINERS}/sabnzbd/config:/config
-      - ${DATA}/usenet:/downloads
-      - ${DATA}/usenet/incomplete:/incomplete-downloads 
+      - ${DATA}:/data
     restart: unless-stopped
 
   # Organize a single page with tabs to manage all services.
