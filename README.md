@@ -23,15 +23,10 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 
 ### Multimedia
 <sub>`multimedia.yml`, optional `multimedia-oauth.yml` and `plex-hw.yml`</sub>
-* [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://sonarr:8989, http://sabnzbd:8080 (uses oauth bypass).  Once up, be sure to visit:
-   - `settings > network > show advanced`: 
-      - `Custom server access URLs` = https://plex.example.com
-      - Uncheck `Enable relay` to serve direct
-   - `Remote access`
-      - `Disable remote access` (confusing I know, but this just disables plex.tv intervention.  You will still have access directly via https://plex.example.com)
+* [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://radarr:7878, http://sonarr:8989, http://sabnzbd:8080. 
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader.  Use top level `DATA` env variable to avoid needing to specify "Remote Path" it the *arr applications.  This makes it easier to hardlink.  See #Layered setup stage 2
-* [Sonarr](https://sonarr.tv/)
-* [Radarr](https://radarr.video/)
+* [Sonarr](https://sonarr.tv/) - should pull indexer from prowlarr
+* [Radarr](https://radarr.video/) - should pull indexer from prowlarr
 * [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to `http://<my-local-ip>:32400/web` first to complete the setup wizard.  Plex differs from every other container and uses `host` networking, therefore enable `Remote` access, port forward `32400` to `<my-local-ip>` and then you may access remotely via https://app.plex.tv.  Using `host` networking makes configuration easier, and ensures traffic runs unrestricted and local devices can easily discover the server.  The not-so-big-deal-downside is that plex.example.com no longer is your go-to url.
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
 
