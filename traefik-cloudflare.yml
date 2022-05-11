@@ -17,6 +17,12 @@ networks:
     # external: false
     # driver: host
     driver: bridge
+    # When you use a docker container with the `bridge` network mode then Docker will put it in a different IP address range, 
+    # something like 172.17.0.XX.  Since that IP Address range is different to your usual network IP address range Plex will 
+    # see that as a remote stream.  From the guides I have read it is usually recommended to run plex in the host network mode 
+    # and not bridge. However, when you go into your server settings -> Settings -> Network -> LAN Networks you might be able to 
+    # add your IP address range there which then Plex will consider as local. So add 192.168.50.0/24 there and see if that helps, 
+    # if not you might need to change the network mode to host. https://www.reddit.com/r/PleX/comments/o0ezvj/comment/h1um64w/?utm_source=share&utm_medium=web2x&context=3
 
 services:
   traefik:
