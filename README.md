@@ -114,7 +114,6 @@ Now it is time to determine what services you want to run.
 
 ## Usage
 ```sh
-~/mediabox$ ./mb
 usage: mb [help|-h|--help] <subcommand>
 
 optional arguments:
@@ -128,10 +127,14 @@ subcommands:
      stops
   restart
      restarts, a combination of stop and start
+  pull
+     pulls updated images
+  shell
+     open a shell to the targeted container
   logs
      shows logs
   cmd <command>
-     executes an arbitrary docker-compose command. Use "cmd help" to list them
+     executes any arbitrary docker-compose command. Use "cmd help" to list them
 
 
 The logs subcommand can be appended by flags and specify the container(s). example: 
