@@ -32,7 +32,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader.  Use top level `DATA` env variable to avoid needing to specify "Remote Path" it the *arr applications.  This makes it easier to hardlink.  See #Layered setup stage 2
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
-* [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to https://<my-local-ip>:32400/web first to complete the setup wizard.  You may then connec later via https://plex.example.com
+* [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to https://<my-local-ip>:32400/web first to complete the setup wizard.  You may then connec later via https://plex.example.com.  On `Remote access`, I had do forward public port `32400` to my server and check `Manually specify public port: 32400`, then log out of chrome cast and re-link to be able to see my local library. <-- THIS was the key to getting plex to see my traffic as local.
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
 
 ### Optional additions
