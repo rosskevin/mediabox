@@ -45,15 +45,17 @@ NOTE: updates likely needed here.
 * [Docker-Compose](https://docs.docker.com/compose/)
 
 ## Initial setup
-1. Fork this repo
-1. Clone _your_ forked repo
+1. Fork this repo (so you can keep changes if you need to)
+1. Clone **_your_** forked repo
 1. `cd mediabox`
 1. `cp .env.template .env`
 1. Replace variables on `.env` with whatever makes sense to you (follow the comments above each property).  Don't worry, start with the basics and get to the rest later
 
+NOTE: set up duplicati.example.com later to make sure your repo and specifically your `.env` is backed up daily.
+
 ## Layered setup
 
-Setting up a home server can be complex.  For all examples, we will assume you are using the domain `example.com`.  You usually need to setup your domain on cloudflare, forward ports on your router and set up dynamic dns.  Before attempting to configure additional applications, this repo is setup to allow you to layer in complexity by minimizing containers started using the `COMPOSE_FILE` variable.  The simple shell script wraps the `docker-compose` command to make it simple to execute `up`, `down`, `restart`, `logs` and most any other typical `docker-compose` command.  See [Usage](#usage) or simply execute `./mb` to see it.
+Setting up a home server can be complex.  For all examples, we will assume you are using the domain `example.com`.  You usually need to setup your domain on cloudflare, forward ports on your router and set up dynamic dns.  Before attempting to configure additional applications, this repo is setup to allow you to layer in complexity by minimizing containers started using the `COMPOSE_FILE` variable.  The simple shell script wraps the `docker-compose` command to make it simple to execute `up`, `down`, `restart`, `logs`, `shell` and most any other typical `docker-compose` command (via `cmd`).  See [Usage](#usage) or simply execute `./mb` to see it.
 
 ## Layered setup stage 1
 
