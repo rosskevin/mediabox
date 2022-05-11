@@ -1,36 +1,34 @@
 version: "3.3"
 
 services:
+  #
+  # Run plex in host mode, due to superior discoverability on the local network and to avoid
+  #   complexities in bridge network setup.  No matter what I tried with a bridged network,
+  #   I was unable to get traffic seen as local, causing downgrading of streams/limiting of quality.
+  #
+  # Using `host` networking limited my access via plex.example.com, but this is already handled
+  #   by plex by enabling `Remote access` and just using https://app.plex.tv instead.
+  #
+  # TL;DR 
+  #   - gave up on plex.example.com and instead used host networking and app.plex.tv
+  #   - access local server via http://<host_ip>:32400/web
+  #   - enable `Remote access`
+  #   - make sure to port forward 32400 on your router to <host_ip>
+  #
+  # @see https://github.com/plexinc/pms-docker/blob/master/README.md#usage
+  #   
   plex:
-    image: linuxserver/plex
+    image: plexinc/pms-docker
     container_name: plex
-    networks:
-      - web
-    ports:
-      - 32400:32400/tcp
-      # add all requested ports from `docker ps`
-      - 3005:3005/tcp
-      - 5353:5353/udp
-      - 8324:8324/tcp
-      - 1900:1900/udp
-      - 32412:32412/udp
-      - 32413:32413/udp
-      - 32414:32414/udp
-      - 32469:32469/tcp     
-    labels:
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
-      - traefik.http.routers.plex.entrypoints=https
-      - traefik.http.services.plex.loadbalancer.server.port=32400
-      - traefik.http.routers.plex.middlewares=internalwhitelist@docker
+    network_mode: host
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - VERSION=docker
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:plex
-      - TP_THEME=${TP_THEME}
+      - TZ=${TIMEZONE}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - PLEX_UID=${PUID}
+      - PLEX_GID=${PGID}      
     volumes:
       - ${CONTAINERS}/plex/config:/config
+      - ${PLEX_TRANSCODE}:/transcode
       - ${DATA}:/data
     restart: unless-stopped
 
