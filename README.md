@@ -32,7 +32,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader.  Use top level `DATA` env variable to avoid needing to specify "Remote Path" it the *arr applications.  This makes it easier to hardlink.  See #Layered setup stage 2
 * [Sonarr](https://sonarr.tv/)
 * [Radarr](https://radarr.video/)
-* [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to http://<my-local-ip>:32400/web first to complete the setup wizard.  Plex differs and uses `host` networking, therefore enable `Remote` access, port forward `32400` to <my-local-ip> and then you may access remotely via https://app.plex.tv.  Using `host` networking makes configuration easier, and ensures traffic runs unrestricted and local devices can easily discover the server.  
+* [Plex](https://www.plex.tv/) - NOTE: in initial config, connect to `http://<my-local-ip>:32400/web` first to complete the setup wizard.  Plex differs from every other container and uses `host` networking, therefore enable `Remote` access, port forward `32400` to `<my-local-ip>` and then you may access remotely via https://app.plex.tv.  Using `host` networking makes configuration easier, and ensures traffic runs unrestricted and local devices can easily discover the server.  The not-so-big-deal-downside is that plex.example.com no longer is your go-to url.
 * [Organizr](https://github.com/causefx/Organizr) - Organize a single page with tabs to manage all services
 
 ### Optional additions
