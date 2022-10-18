@@ -30,6 +30,10 @@ services:
       - ${CONTAINERS}/plex/config:/config
       - ${PLEX_TRANSCODE}:/transcode
       - ${DATA}:/data
+    # Enables Hardware Transcoding if available
+    # https://github.com/plexinc/pms-docker#intel-quick-sync-hardware-transcoding-support
+    devices:
+      - /dev/dri:/dev/dri      
     restart: unless-stopped
 
   sonarr:

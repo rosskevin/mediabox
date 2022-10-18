@@ -22,7 +22,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 * [Portainer](https://www.portainer.io/)
 
 ### Multimedia
-<sub>`multimedia.yml`, optional `multimedia-oauth.yml` and `plex-hw.yml`</sub>
+<sub>`multimedia.yml`, optional `multimedia-oauth.yml`</sub>
 * [Prowlarr](https://wiki.servarr.com/prowlarr) - [quick start](https://wiki.servarr.com/prowlarr/quick-start-guide) - Indexer/manager manager/proxy that supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Radarr, Readarr, and Sonarr offering complete management of your indexers with no per app Indexer setup required.  HINT: use local network names in settings e.g. http://prowlarr:9696, http://radarr:7878, http://sonarr:8989, http://sabnzbd:8080. 
 * [SABnzbd](https://sabnzbd.org/) - Usenet downloader.  Use top level `DATA` env variable to avoid needing to specify "Remote Path" it the *arr applications.  This makes it easier to hardlink.  See #Layered setup stage 2
 * [Sonarr](https://sonarr.tv/) - should pull indexer from prowlarr
