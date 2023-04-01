@@ -2,8 +2,12 @@
 #set -euo pipefail
 set -uo pipefail
 
-cmd() {
-    docker-compose "$@"
+dodocker() {
+    docker "$@"
+}
+
+docompose() {
+    docker compose "$@"
 }
 
 determine_distro() {
@@ -25,29 +29,101 @@ determine_distro() {
     __distro=$(echo $__distro | tr "[:upper:]" "[:lower:]")
 }
 
+start() {
+    docompose up -d --remove-orphans
+}
+
 up() {
-    cmd up -d
+    start
+}
+
+stop() {
+    docompose down --remove-orphans
 }
 
 down() {
-    cmd down --remove-orphans
+    stop
 }
 
 restart() {
-    down
-    up
+    stop
+    start
 }
 
 logs() {
-    cmd logs "$@"
+    docompose logs "$@"
 }
 
-pull() {
-    cmd pull "$@"
-}
+# pull() {
+#     docompose pull "$@"
+# }
 
 shell() {
-    cmd exec "$@" bash
+    docompose exec "$@" bash
+}
+
+check_for_snap() {
+    if [[ "$__distro" = "ubuntu" && -n "$(command -v snap)" ]] && snap list 2>/dev/null | grep -qw 'docker'; then
+        echo
+        echo "WARNING! Snap docker package detected. This WILL result in issues."
+        echo "Removing the package will delete volumes and require a resync,"
+        echo "as well as re-import of all validator keys."
+        echo
+        echo "Doing so is still highly recommended however."
+        echo
+        echo "The exact steps depend a little on whether there already is"
+        echo "an apt version of docker installed as well, but in a nutshell"
+        echo '"./mb stop" followed by "sudo snap remove --purge docker"'
+        echo "and then a reboot, and as needed install docker.io or docker-ce with apt,"
+        echo "and restart mb."
+        echo
+        echo "Aborting, this is not safe"
+        exit 1
+    fi
+}
+
+# Arguments are passed, but shellcheck doesn't recognize that
+# shellcheck disable=SC2120
+update() {
+    __free_space=$(df -P $(pwd) | awk '/[0-9]%/{print $(NF-2)}')
+
+    re='^[0-9]+$'
+    if ! [[ "${__free_space}" =~ $re ]] ; then
+        echo "Unable to determine free disk space. This is likely a bug."
+        echo "df reports $(df -P $(pwd)) and __free_space is ${__free_space}"
+    elif [ "$(df -P $(pwd) | awk '/[0-9]%/{print $(NF-2)}')" -lt 1024 ]; then
+        echo "You have less than 1 MiB of space left on $(pwd)."
+        echo "Aborting, as an update is not safe."
+        exit 1
+    fi
+
+    __docker_dir=$(dodocker system info --format '{{.DockerRootDir}}')
+    __free_space=$(df -P ${__docker_dir} | awk '/[0-9]%/{print $(NF-2)}')
+
+    re='^[0-9]+$'
+    if ! [[ "${__free_space}" =~ $re ]] ; then
+        echo "Unable to determine free disk space. This is likely a bug."
+        echo "df reports $(df -P ${__docker_dir}) and __free_space is ${__free_space}"
+    elif [ "${__free_space}" -lt 1048576 ]; then
+        echo "You have less than 1 GiB of space left on ${__docker_dir}."
+        echo "Aborting, as an update is not safe."
+        exit 1
+    fi
+
+    dodocker system prune --force
+    docompose --profile tools build --pull
+    exec 3>&1
+    exec 4>&2
+    exec 1> /dev/null
+    exec 2> /dev/null
+    docompose --profile tools pull --ignore-pull-failures || true
+    exec 1>&3
+    exec 2>&4
+
+    echo
+    echo "An \"./mb up\" command will start using the new images."
+
+    check_for_snap
 }
 
 printhelp() {
@@ -59,20 +135,20 @@ printhelp() {
     echo "    print this message and exit"
     echo ""
     echo "subcommands:"
-    echo "  up"
+    echo "  start"
     echo "     starts the configured files"
-    echo "  down"
+    echo "  stop"
     echo "     stops"
     echo "  restart"
     echo "     restarts, a combination of stop and start"
-    echo "  pull"
+    echo "  update"
     echo "     pulls updated images"
     echo "  shell"
     echo "     open a shell to the targeted container"
     echo "  logs"
     echo "     shows logs"
-    echo "  cmd <command>"
-    echo "     executes any arbitrary docker-compose command. Use \"cmd help\" to list them"
+    echo "  docompose <command>"
+    echo "     executes any arbitrary docker-compose command. Use \"docompose help\" to list them"
     echo ""
     echo ""
     echo "The logs subcommand can be appended by flags and specify the container(s). example: "
