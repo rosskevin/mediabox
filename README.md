@@ -121,20 +121,20 @@ optional arguments:
     print this message and exit
 
 subcommands:
-  up
+  start
      starts the configured files
-  down
+  stop
      stops
   restart
      restarts, a combination of stop and start
-  pull
+  update
      pulls updated images
   shell
      open a shell to the targeted container
   logs
      shows logs
-  cmd <command>
-     executes any arbitrary docker-compose command. Use "cmd help" to list them
+  docompose <command>
+     executes any arbitrary docker compose command. Use "docompose help" to list them
 
 
 The logs subcommand can be appended by flags and specify the container(s). example: 

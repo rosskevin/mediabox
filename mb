@@ -148,7 +148,7 @@ printhelp() {
     echo "  logs"
     echo "     shows logs"
     echo "  docompose <command>"
-    echo "     executes any arbitrary docker-compose command. Use \"docompose help\" to list them"
+    echo "     executes any arbitrary docker compose command. Use \"docompose help\" to list them"
     echo ""
     echo ""
     echo "The logs subcommand can be appended by flags and specify the container(s). example: "
