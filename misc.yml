@@ -50,7 +50,7 @@ services:
 
   # Backup software to store encrypted backups online
   duplicati:
-    image: linuxserver/duplicati
+    image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     networks:
       - web

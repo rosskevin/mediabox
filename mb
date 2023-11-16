@@ -111,14 +111,8 @@ update() {
     fi
 
     dodocker system prune --force
+    docompose --profile tools pull # --ignore-pull-failures --quiet || true
     docompose --profile tools build --pull
-    exec 3>&1
-    exec 4>&2
-    exec 1> /dev/null
-    exec 2> /dev/null
-    docompose --profile tools pull --ignore-pull-failures || true
-    exec 1>&3
-    exec 2>&4
 
     echo
     echo "An \"./mb up\" command will start using the new images."

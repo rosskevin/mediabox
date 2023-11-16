@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   sonarr:
-    image: linuxserver/sonarr
+    image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     networks:
       - web
@@ -63,7 +63,7 @@ services:
     restart: unless-stopped
 
   radarr:
-    image: linuxserver/radarr
+    image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     networks:
       - web
@@ -89,7 +89,7 @@ services:
     restart: unless-stopped
 
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:develop
+    image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     networks:
       - web    
@@ -112,7 +112,7 @@ services:
     restart: unless-stopped
 
   sabnzbd:
-    image: linuxserver/sabnzbd
+    image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     networks:
       - web

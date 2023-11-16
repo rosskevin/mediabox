@@ -3,7 +3,7 @@ version: "3.3"
 # Base file that must be used with a network topology.  See torrents-on-network.yml and torrents-on-vpn.yml for usage.
 services:
   deluge:
-    image: linuxserver/deluge
+    image: lscr.io/linuxserver/deluge:latest
     container_name: deluge
     labels:
       - com.centurylinklabs.watchtower.enable=true
