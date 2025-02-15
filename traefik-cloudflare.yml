@@ -17,6 +17,19 @@ networks:
     driver: bridge
 
 services:
+  # Cloudflare DDNS - Dynamic DNS Updater
+  cf-ddns:
+    container_name: cf-ddns
+    image: oznu/cloudflare-ddns:latest
+    restart: always
+    environment:
+      - API_KEY=$CF_API_KEY
+      - ZONE=$DOMAIN
+      - PROXIED=true
+      - RRTYPE=A
+      - DELETE_ON_STOP=false
+      - DNS_SERVER=1.1.1.1
+
   traefik:
     image: traefik
     restart: unless-stopped
