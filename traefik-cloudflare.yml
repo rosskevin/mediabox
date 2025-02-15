@@ -6,7 +6,7 @@ version: "3.3"
 # This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
 #   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
 #
-# This pattern can utilize HTTPS and allow only specific IPs to access via the IP_WHITELIST_SOURCERANGE.  For simpler setups, this means
+# This pattern can utilize HTTPS and allow only specific IPs to access via the IP_ALLOWLIST_SOURCERANGE.  For simpler setups, this means
 #   that setting up OAUTH isn't an absolute necessity.
 #
 # @credit to https://github.com/htpcBeginner/docker-traefik for better traefik settings.
@@ -105,7 +105,7 @@ services:
       # -----------------------------
       # Define reusable middlewares
       # -----------------------------
-      - traefik.http.middlewares.internalwhitelist.ipwhitelist.sourcerange=${IP_WHITELIST_SOURCERANGE}  
+      - traefik.http.middlewares.internalwhitelist.ipallowlist.sourcerange=${IP_ALLOWLIST_SOURCERANGE}  
 
       # -----------------------------
       # Apply ip restriction to dashboard UI
