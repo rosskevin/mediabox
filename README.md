@@ -2,7 +2,7 @@
 
 ![](https://github.com/rosskevin/mediabox/workflows/Multimedia%20Stack%20Deployment/badge.svg)
 
-![](https://i.imgur.com/UZklu5w.jpg)
+![](assets/mb.jpeg)
 
 ## TL;DR
 A home media server using `docker-compose` that enables SSL wildcard certificates via Cloudflare and LetsEncrypt.  The approach allows layering of complexity and features including Single sign on (SSO) via GCP.
@@ -38,6 +38,9 @@ NOTE: updates likely needed here.
 ## Prerequisites
 * [Docker](https://www.docker.com/)
 * [Docker-Compose](https://docs.docker.com/compose/)
+* [Create Cloudflare API Token](https://dash.cloudflare.com/profile/api-tokens) that matches the image below:
+
+![](assets/cf.png)
 
 ## Initial setup
 1. Fork this repo (so you can keep changes if you need to)
