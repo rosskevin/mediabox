@@ -13,7 +13,7 @@ NOTE: These are listed in the order I recommend they are layered and tested duri
 
 ### Baseline
 <sub>`traefik-cloudflare.yml` and optional `traefik-oauth.yml`</sub>
-* [Traefik](https://containo.us/traefik/) - Service ingress, routing, etc, handles SSL certificates via DNS-01 challenge and LetsEncrypt
+* [Traefik](https://containo.us/traefik/) - Cloudflare DDNS, Service ingress, routing, etc, handles SSL certificates via DNS-01 challenge and LetsEncrypt
 
 ### Misc
 <sub>`misc.yml` and optional `misc-oauth.yml`</sub>
