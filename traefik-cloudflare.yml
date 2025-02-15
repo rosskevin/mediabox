@@ -63,7 +63,7 @@ services:
 
       # Letsencrypt - wildcard certificates can only be generated through a DNS-01 challenge.
       - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge=true
-      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.delayBeforeCheck=90 # To delay DNS check and reduce LE hitrate
+      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.propagation.delayBeforeChecks=90 # To delay DNS check and reduce LE hitrate
       - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge.provider=cloudflare
       - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesresolvers.cloudflare-resolver.acme.email=${SSL_ACME_EMAIL}
