@@ -50,7 +50,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sonarr.entrypoints=https
-      - traefik.http.routers.sonarr.middlewares=internalwhitelist@docker
+      - traefik.http.routers.sonarr.middlewares=exposedAllowList@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -76,7 +76,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.radarr.entrypoints=https
-      - traefik.http.routers.radarr.middlewares=internalwhitelist@docker    
+      - traefik.http.routers.radarr.middlewares=exposedAllowList@docker    
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -100,7 +100,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.prowlarr.entrypoints=https
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
-      - traefik.http.routers.prowlarr.middlewares=internalwhitelist@docker    
+      - traefik.http.routers.prowlarr.middlewares=exposedAllowList@docker    
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -124,7 +124,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.entrypoints=https
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
-      - traefik.http.routers.sabnzbd.middlewares=internalwhitelist@docker
+      - traefik.http.routers.sabnzbd.middlewares=exposedAllowList@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -149,7 +149,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.orzanizr.entrypoints=https
       - traefik.http.services.organizr.loadbalancer.server.port=80
-      - traefik.http.routers.organizr.middlewares=internalwhitelist@docker
+      - traefik.http.routers.organizr.middlewares=exposedAllowList@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

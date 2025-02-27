@@ -1,0 +1,54 @@
+# https://doc.traefik.io/traefik/getting-started/quick-start/
+
+# works localhost, and on local network
+# curl -H Host:whoami.example.com http://127.0.0.1
+# curl -H Host:whoami.example.com http://192.168.1.191
+
+# Now try https://whoami.example.com
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    ports:
+      # The HTTP/s port
+      - "80:80"
+      - 443:443
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"    
+    # Enables the web UI and tells Traefik to listen to docker
+    command: 
+      - --api.insecure=true 
+      - --log.level=DEBUG
+      - --providers.docker
+      # Set default rule to use container name as subomain e.g. whoami.example.com
+      - --providers.docker.defaultRule=Host(`{{ index .Labels "com.docker.compose.service" }}.${DOMAIN}`)
+      # Entrypoints for HTTP, HTTPS, and NX (TCP + UDP)
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+
+      # Setup tls use for all services
+      - --entrypoints.https.http.tls.certresolver=cloudflare-resolver
+      - --entrypoints.https.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.https.http.tls.domains[0].sans=*.${DOMAIN}
+
+      # Letsencrypt - wildcard certificates can only be generated through a DNS-01 challenge.
+      - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge=true
+      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.propagation.delayBeforeChecks=90 # To delay DNS check and reduce LE hitrate
+      - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesResolvers.cloudflare-resolver.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.cloudflare-resolver.acme.email=${SSL_ACME_EMAIL}
+      - --certificatesresolvers.cloudflare-resolver.acme.storage=etc/traefik/acme/acme.json  
+    environment:
+      - CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_API_KEY=${CF_API_KEY}
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONTAINERS}/traefik/acme:/etc/traefik/acme
+  whoami:
+    # A container that exposes an API to show its IP address
+    image: traefik/whoami
+    container_name: whoami
+    labels:
+      - traefik.http.routers.whoami.entrypoints=http
+      - traefik.http.routers.whoami.entrypoints=https

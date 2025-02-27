@@ -31,6 +31,6 @@ services:
       # See more @ https://community.containo.us/t/docker-compose-with-network-mode-service-service-name/3395
       #
       - traefik.http.routers.deluge.entrypoints=https
-      - traefik.http.routers.vpn.middlewares=internalwhitelist@docker
+      - traefik.http.routers.vpn.middlewares=exposedAllowList@docker
     ports:
       - 8112:8112 # Deluge

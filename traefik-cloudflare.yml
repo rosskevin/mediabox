@@ -1,15 +1,14 @@
-version: "3.3"
-
 #
 # This file uses cloudflare for LetsEncrypt DNS challenge and provides a wildcard cert for all subdomains.
 #
 # This file can stand alone as the simplest version to test your network, DNS, etc.  Simply run this and visit whoami.${DOMAIN}
 #   to see that everything is making connections properly.  Be sure to check logs e.g. `./md logs traefik` and address any errors.
 #
-# This pattern can utilize HTTPS and allow only specific IPs to access via the IP_ALLOWLIST_SOURCERANGE.  For simpler setups, this means
+# This pattern can utilize HTTPS and allow only specific IPs to access via the EXPOSED_IP_ALLOWLIST.  For simpler setups, this means
 #   that setting up OAUTH isn't an absolute necessity.
 #
 # @credit to https://github.com/htpcBeginner/docker-traefik for better traefik settings.
+# @see https://www.simplehomelab.com/cloudflare-settings-for-traefik-docker/ for explanations
 #
 
 networks:
@@ -29,6 +28,8 @@ services:
       - RRTYPE=A
       - DELETE_ON_STOP=false
       - DNS_SERVER=1.1.1.1
+    networks:
+      - web      
 
   traefik:
     image: traefik
@@ -37,11 +38,14 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 8080:8080 # dashboard enabled by --api.insecure=true
     command:
       - --global.sendAnonymousUsage=true
       - --api.dashboard=true
-      - --api.debug=true      
-      - --log.level=INFO
+      # - --accesslog=true
+      # - --log.level=DEBUG
+      # - --api.debug=true      
+      - --api.insecure=true # enables dashboard
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=${COMPOSE_PROJECT_NAME}_web
@@ -59,7 +63,7 @@ services:
       - --entrypoints.https.http.tls.domains[0].sans=*.${DOMAIN}
 
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
-      # - --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22
+      #- --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
 
       # Letsencrypt - wildcard certificates can only be generated through a DNS-01 challenge.
       - --certificatesresolvers.cloudflare-resolver.acme.dnschallenge=true
@@ -69,7 +73,7 @@ services:
       - --certificatesresolvers.cloudflare-resolver.acme.email=${SSL_ACME_EMAIL}
       - --certificatesresolvers.cloudflare-resolver.acme.storage=etc/traefik/acme/acme.json
       # Enable the following staging server initially to test successful issuance of certificates (and avoid being rate limited due to errors)
-      # - --certificatesresolvers.cloudflare-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      #x- --certificatesresolvers.cloudflare-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_API_KEY=${CF_API_KEY}
@@ -81,13 +85,6 @@ services:
     labels:
       - traefik.enable=true
       # -----------------------------
-      # HTTP-to-HTTPS Redirect
-      # -----------------------------
-      # - traefik.http.routers.http-catchall.entrypoints=http
-      # - traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)
-      # - traefik.http.routers.http-catchall.middlewares=redirect-to-https
-      # - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-      # -----------------------------
       # HTTP Routers
       # -----------------------------
       - traefik.http.routers.traefik.entrypoints=https
@@ -98,28 +95,31 @@ services:
       # -----------------------------
       # Healthcheck/ping
       # -----------------------------
-      #- traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)
-      #- traefik.http.routers.ping.tls=true
-      #- traefik.http.routers.ping.service=ping@internal
+      #x- traefik.http.routers.ping.rule=Host(`traefik.${DOMAIN}`) && Path(`/ping`)
+      #x- traefik.http.routers.ping.tls=true
+      #x- traefik.http.routers.ping.service=ping@internal
 
       # -----------------------------
       # Define reusable middlewares
       # -----------------------------
-      - traefik.http.middlewares.internalwhitelist.ipallowlist.sourcerange=${IP_ALLOWLIST_SOURCERANGE}  
+      - traefik.http.middlewares.exposedAllowList.ipallowlist.sourcerange=${EXPOSED_IP_ALLOWLIST}  
 
       # -----------------------------
       # Apply ip restriction to dashboard UI
       # -----------------------------
-      - traefik.http.routers.traefik.middlewares=internalwhitelist@docker
+      - traefik.http.routers.traefik.middlewares=exposedAllowList@docker
 
   # sample for verification of traefik, routing, etc.
+  # curl -H Host:whoami.example.com http://127.0.0.1
   whoami:
     image: traefik/whoami
     restart: unless-stopped
     container_name: whoami
+    command:
+      - --verbose
     networks:
       - web
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=https
-      - traefik.http.routers.whoami.middlewares=internalwhitelist@docker
+      - traefik.http.routers.whoami.middlewares=exposedAllowList@docker

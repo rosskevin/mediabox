@@ -26,7 +26,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=https
       - traefik.http.services.portainer.loadbalancer.server.port=9000
-      - traefik.http.routers.portainer.middlewares=internalwhitelist@docker
+      - traefik.http.routers.portainer.middlewares=exposedAllowList@docker
     restart: always
     command: -H unix:///var/run/docker.sock
     volumes:
@@ -60,7 +60,7 @@ services:
       - com.centurylinklabs.duplicati.enable=true
       - traefik.enable=true
       - traefik.http.routers.duplicati.entrypoints=https
-      - traefik.http.routers.duplicati.middlewares=internalwhitelist@docker
+      - traefik.http.routers.duplicati.middlewares=exposedAllowList@docker
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
