@@ -38,9 +38,8 @@ NOTE: updates likely needed here.
 ## Prerequisites
 * [Docker](https://www.docker.com/)
 * [Docker-Compose](https://docs.docker.com/compose/)
-* [Create Cloudflare API Token](https://dash.cloudflare.com/profile/api-tokens) that matches the image below:
+* [Get your Cloudflare `Global API Key`](https://dash.cloudflare.com/profile/api-tokens) for use as `CF_API_KEY` in the `.env`
 
-![](assets/cf.png)
 
 ## Initial setup
 1. Fork this repo (so you can keep changes if you need to)
