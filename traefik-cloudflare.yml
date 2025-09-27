@@ -16,20 +16,37 @@ networks:
     driver: bridge
 
 services:
-  # Cloudflare DDNS - Dynamic DNS Updater
-  cf-ddns:
-    container_name: cf-ddns
-    image: oznu/cloudflare-ddns:latest
+  cloudflare-ddns:
+    container_name: cloudflare-ddns
+    image: favonia/cloudflare-ddns:latest
+    # Choose the appropriate tag based on your need:
+    # - "latest" for the latest stable version (which could become 2.x.y
+    #   in the future and break things)
+    # - "1" for the latest stable version whose major version is 1
+    # - "1.x.y" to pin the specific version 1.x.y
+    network_mode: host
+    # This bypasses network isolation and makes IPv6 easier (optional; see below)
     restart: always
+    # Restart the updater after reboot
+    user: "1000:1000"
+    # Run the updater with specific user and group IDs (in that order).
+    # You can change the two numbers based on your need.
+    read_only: true
+    # Make the container filesystem read-only (optional but recommended)
+    cap_drop: [all]
+    # Drop all Linux capabilities (optional but recommended)
+    security_opt: [no-new-privileges:true]
+    # Another protection to restrict superuser privileges (optional but recommended)
     environment:
-      - API_KEY=$CF_API_KEY
-      - ZONE=$DOMAIN
+      - CLOUDFLARE_API_TOKEN=${CF_API_KEY}
+        # Your Cloudflare API token
+      - DOMAINS=${DOMAIN}
+        # Your domains (separated by commas)
       - PROXIED=true
-      - RRTYPE=A
-      - DELETE_ON_STOP=false
-      - DNS_SERVER=1.1.1.1
-    networks:
-      - web      
+        # Tell Cloudflare to cache webpages and hide your IP (optional)
+      - IP6_PROVIDER=none
+        # Disable IPv6 (optional; see below)
+
 
   traefik:
     image: traefik
