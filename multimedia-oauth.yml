@@ -9,16 +9,12 @@ services:
       - traefik.http.routers.plex.middlewares=chain-oauth@docker
   sabnzbd:
     labels:
-      # Bypass authentication for api calls with our specific api key
-      - traefik.http.routers.sabnzbd-bypass.entrypoints=https
-      - traefik.http.routers.sabnzbd-bypass.rule=Host(`sabnzbd.${DOMAIN}`) && (HeadersRegexp(`X-Api-Key`, `${SABNZBD_API_KEY}`) || Query(`apikey`, `${SABNZBD_API_KEY}`))
-      - traefik.http.routers.sabnzbd-bypass.middlewares=chain-no-auth@docker
-      - traefik.http.routers.sabnzbd-bypass.priority=100
-      - traefik.http.routers.sabnzbd-bypass.service=sabnzbd
+      # Note: Traefik 3.x removed Headers/HeadersRegexp from router rules
+      # API key bypass is now handled by the forward-auth container (oauth) configuration
+      # See traefik-oauth.yml for the command line option to enable bypass rules
 
-      # Authenticated
+      # Main router with OAuth
       - traefik.http.routers.sabnzbd.middlewares=chain-oauth@docker
-      - traefik.http.routers.sabnzbd.priority=99
   sonarr:
     labels:
       - traefik.http.routers.sonarr.middlewares=chain-oauth@docker

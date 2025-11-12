@@ -34,10 +34,8 @@ services:
     restart: unless-stopped
     container_name: oauth
     image: thomseddon/traefik-forward-auth
-    # Allow apps to bypass OAuth. Radarr example below will bypass OAuth if API key is present in the request (eg. from NZB360 mobile app).
-    # While this is one way, the recommended way is to bypass authentication using Traefik labels shown in some of the apps later.
-    # command: --rule.radarr.action=allow --rule.radarr.rule=HeadersRegexp(`X-Api-Key`, `$RADARR_API_KEY`)
-    # command: --rule.sabnzbd.action=allow --rule.sabnzbd.rule=HeadersRegexp(`X-Forwarded-Uri`, `$SABNZBD_API_KEY`)
+    # Allow apps to bypass OAuth when API key is present in the request (eg. from NZB360 mobile app)
+    command: --rule.sabnzbd.action=allow --rule.sabnzbd.rule=HeadersRegexp(`X-Forwarded-Uri`, `${SABNZBD_API_KEY}`)
     environment:
       - PROVIDERS_GOOGLE_CLIENT_ID=${GCP_OAUTH_CLIENT_ID}
       - PROVIDERS_GOOGLE_CLIENT_SECRET=${GCP_OAUTH_CLIENT_SECRET}
