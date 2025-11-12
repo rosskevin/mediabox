@@ -11,7 +11,7 @@ services:
     labels:
       # Bypass authentication for api calls with our specific api key
       - traefik.http.routers.sabnzbd-bypass.entrypoints=https
-      - traefik.http.routers.sabnzbd-bypass.rule=Host(`radarr.${DOMAIN}`) && (Headers(`X-Api-Key`, `${SABNZBD_API_KEY}`) || Query(`apikey`, `${SABNZBD_API_KEY}`))
+      - traefik.http.routers.sabnzbd-bypass.rule=Host(`sabnzbd.${DOMAIN}`) && (HeadersRegexp(`X-Api-Key`, `${SABNZBD_API_KEY}`) || Query(`apikey`, `${SABNZBD_API_KEY}`))
       - traefik.http.routers.sabnzbd-bypass.middlewares=chain-no-auth@docker
       - traefik.http.routers.sabnzbd-bypass.priority=100
       - traefik.http.routers.sabnzbd-bypass.service=sabnzbd
