@@ -35,7 +35,9 @@ services:
     container_name: oauth
     image: thomseddon/traefik-forward-auth
     # Allow apps to bypass OAuth when API key is present in the request (eg. from NZB360 mobile app)
-    command: --rule.sabnzbd.action=allow --rule.sabnzbd.rule=HeadersRegexp(`X-Forwarded-Uri`, `${SABNZBD_API_KEY}`)
+    command:
+      - --rule.sabnzbd.action=allow
+      - --rule.sabnzbd.rule=HeadersRegexp(`X-Forwarded-Uri`, `${SABNZBD_API_KEY}`)
     environment:
       - PROVIDERS_GOOGLE_CLIENT_ID=${GCP_OAUTH_CLIENT_ID}
       - PROVIDERS_GOOGLE_CLIENT_SECRET=${GCP_OAUTH_CLIENT_SECRET}
