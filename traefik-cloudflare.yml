@@ -92,8 +92,7 @@ services:
       # Enable the following staging server initially to test successful issuance of certificates (and avoid being rate limited due to errors)
       #x- --certificatesresolvers.cloudflare-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
     environment:
-      - CF_API_EMAIL=${CF_API_EMAIL}
-      - CF_API_KEY=${CF_API_KEY}
+      - CF_DNS_API_TOKEN=${CF_API_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${CONTAINERS}/traefik/acme:/etc/traefik/acme
